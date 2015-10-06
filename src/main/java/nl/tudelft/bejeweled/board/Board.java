@@ -40,7 +40,7 @@ public class Board implements Serializable {
     
     private transient Jewel[][] grid;
 
-    private final transient List<BoardObserver> observers;
+    private transient List<BoardObserver> observers;
 
     /** The JavaFX group containing all the jewels. */
     private transient Group sceneNodes;
@@ -913,6 +913,7 @@ public class Board implements Serializable {
      *
      */
 	public void makeGrid(Group sceneNodes) {
+        this.observers = new ArrayList<>();
 		grid = new Jewel[GRID_WIDTH][GRID_WIDTH];
 		this.sceneNodes = sceneNodes;
 		for (int i = 0; i < GRID_WIDTH; i++) {

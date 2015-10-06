@@ -291,6 +291,8 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
        }
        //Restore the grid from its serialized form
        levelManager.getBoard().makeGrid(getSceneNodes()); 
+       levelManager.getBoard().addObserver(this);
+
       inProgress = true; isResume = false; isStop = false; saveFile.delete(); 
         Logger.logInfo("Game resumed");       
        scoreLabel.setText(Integer.toString(levelManager.getScore()));
