@@ -24,7 +24,7 @@ import java.util.TreeMap;
 public abstract class Game implements Serializable {
 
     /** All nodes to be displayed in the game window. */
-    private Group sceneNodes;
+    protected Group sceneNodes;
 
     /** The game loop using JavaFX's <code>Timeline</code> API.*/
     private static Timeline gameLoop;
@@ -99,7 +99,7 @@ public abstract class Game implements Serializable {
      * @param gamePane The primary scene.
      * @param scoreLabel The label for the score.
      */
-    public abstract void initialise(Board board, Pane gamePane, Label scoreLabel);
+    public abstract void initialise(Pane gamePane, Label scoreLabel);
 
     /**Kicks off (plays) the Timeline objects containing one key frame
      * that simply runs indefinitely with each frame invoking a method

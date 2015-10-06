@@ -38,18 +38,19 @@ public class Board implements Serializable {
     
     private Random rand = new Random();
     
-    private Jewel[][] grid;
+    private transient Jewel[][] grid;
 
-    private final List<BoardObserver> observers;
+    private final transient List<BoardObserver> observers;
 
     /** The JavaFX group containing all the jewels. */
-    private Group sceneNodes;
+    private transient Group sceneNodes;
 
 	private SpriteStore spriteStore;
 	private SelectionCursor selectionCursor;
 	private boolean toReverseMove = false;
-	private Jewel reverse1;
-	private Jewel reverse2;
+	private boolean empty = false;
+	private transient Jewel reverse1;
+	private transient Jewel reverse2;
 	private int[][] state;
 
     /**
@@ -693,7 +694,7 @@ public class Board implements Serializable {
     	for (int i = 0; i < gridWidth; i++) {	
     		int emptySpots = 0;
     		for (int j = gridHeight - 1; j >= 0; j--) {
-    			if (grid[i][j].getState() == SpriteState.TO_BE_REMOVED) {
+    			if (grid[i][j] == null || grid[i][j].getState() == SpriteState.TO_BE_REMOVED) {
     				emptySpots++;
     			} else {
     				if (emptySpots > 0) {
@@ -721,18 +722,33 @@ public class Board implements Serializable {
 
     	
     /**
-     * This function fille the null spots in the grid[][] with Jewels
+     * This function fills the null spots in the grid[][] with Jewels
      * at the start of the game.
      */
     public void fillNullSpots() {
         for (int x = 0; x < grid.length; x++) {
             for (int y = 0; y < grid[x].length; y++) {
                 if (grid[x][y] == null) {
-                    addRandomJewel(x, y);
+                    addRandomJewel(x, y);                
                 }
             }
         }
     }
+    
+    /**
+     * Clears the grid and removes the jewels from the scenegroup.
+     */
+    public void clearGrid(){
+        for (int x = 0; x < grid.length; x++) {
+            for (int y = 0; y < grid[x].length; y++) {
+            	if (grid[x][y] != null) {
+	            	grid[x][y].remove(sceneNodes);
+	            	grid[x][y] = null;
+            	}
+        	}
+        }
+    }
+    
     
     /**
 	 * Getter function for the current spriteStore.
@@ -755,7 +771,10 @@ public class Board implements Serializable {
 	 * 	 */
 	public void update() {
 		if (!anyJewelsAnimating()) {
-			if (toReverseMove) {
+			if (empty) {
+				spawnJewels();
+				empty = false;
+			} else if (toReverseMove) {
 				tryToReverse();
 			} else {
 				checkBoardCombos();
@@ -764,6 +783,18 @@ public class Board implements Serializable {
 		}
 	}
 	
+	/**
+	 * Spawn new jewels at the start of a new level.
+	 */
+	private void spawnJewels() {
+	    for (int i = 0; i < gridWidth; i++) {
+            for (int j = 0; j < gridHeight; j++) {
+            	 addRandomJewel(i, j);
+            	 grid[i][j].fadeIn(sceneNodes); 
+            }
+        }
+	}
+
 	/**
 	 * Getter function for the current jewel Grid (used for testing).
 	 * @return current grid of jewels
@@ -810,10 +841,23 @@ public class Board implements Serializable {
     public void resetGrid() {
         for (int x = 0; x < grid.length; x++) {
             for (int y = 0; y < grid[x].length; y++) {
-                grid[x][y].implode(sceneNodes);
-                grid[x][y] = null;
+            	grid[x][y] = null;
             }
         }
+    }
+    
+    /**
+     * Fade out the entire grid.
+     */
+    public void implodeGrid() {
+        for (int x = 0; x < grid.length; x++) {
+            for (int y = 0; y < grid[x].length; y++) {
+            	if (grid[x][y] != null) {
+	                grid[x][y].implode(sceneNodes);
+            	}
+            }
+        }
+        empty = true;
     }
 
 	/**
@@ -841,7 +885,7 @@ public class Board implements Serializable {
 	public boolean anyJewelsAnimating() {
 		for (int x = 0; x < gridWidth; x++) {
 			for (int y = 0; y < gridHeight; y++) {
-				if (grid[x][y].animationActive()) {
+				if (grid[x][y] != null && grid[x][y].animationActive()) {
 					return true;
 				}
 			}
@@ -868,7 +912,9 @@ public class Board implements Serializable {
      * Make grid from saved state.
      *
      */
-	public void makeGrid() {
+	public void makeGrid(Group sceneNodes) {
+		grid = new Jewel[GRID_WIDTH][GRID_WIDTH];
+		this.sceneNodes = sceneNodes;
 		for (int i = 0; i < GRID_WIDTH; i++) {
             for (int j = 0; j < GRID_WIDTH; j++) {
                Jewel jewel = new Jewel(state[i][j], i, j); 

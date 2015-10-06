@@ -52,23 +52,18 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
     private static final int GAME_OVER_XPOS = 100;
     private static final int GAME_OVER_YPOS = 200;
 
-    private static final String BOARD_SAVE_FILE = "board.mine";
-    private static final String SCORE_SAVE_FILE = "score.mine";
+    private static final String SAVE_FILE = "save.mine";
 
 
     /** The board class that maintains the jewels. */
-    private Board board;
+    private LevelManager levelManager;
 
-    private BoardFactory boardFactory;
-
-    private int score = 0;
-    
     private boolean isStop = false;
     
     private boolean isResume = true;
-
-    private SpriteStore spriteStore;
-
+    
+	private SpriteStore spriteStore;
+	
     /**
      * <code>true</code> if the game is in progress.
      */
@@ -77,6 +72,7 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
     private Pane gamePane;
 
     private Label scoreLabel;
+
 
     /**
      * The constructor for the bejeweled game.
@@ -87,7 +83,6 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
     public BejeweledGame(int framesPerSecond, String windowTitle, SpriteStore spriteStore) {
         super(framesPerSecond, windowTitle);
         this.spriteStore = spriteStore;
-        boardFactory = new BoardFactory(spriteStore);
         try {
         	setHighScore(new HighScore());
         
@@ -109,21 +104,16 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
         }
         inProgress = true;
         Logger.logInfo("Game started");
-
-        score = 0;
-        scoreLabel.setText(Integer.toString(score));
-
-        // fill board if game was stopped and started again
-        board.fillNullSpots();
+        
+        levelManager.newGame();
+        scoreLabel.setText(Integer.toString(levelManager.getScore())); 
 
         // Create the group that holds all the jewel nodes and create a game scene
         gamePane.getChildren().add(new Scene(getSceneNodes(),
                 gamePane.getWidth(),
                 gamePane.getHeight()).getRoot());
 
-        // check for any combo's on the freshly created board
-        int comboCount = board.checkBoardCombos();
-        Logger.logInfo("Combo Jewels on board: " + comboCount);
+    
         isResume = false;
         removeSaveGame();
     }
@@ -137,14 +127,14 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
             return;
         }
 
-        Logger.logInfo("Final score: " + score);
-        int place = getHighScore().isHighScore(score);
+        Logger.logInfo("Final score: " + levelManager.getScore());
+        int place = getHighScore().isHighScore(levelManager.getScore());
         if (place >  0) {
         	Optional<String> result = showTextInputDialog("Enter your name",
                     "Congratulations, you achieved a highscore." + " Please enter your name:");
 			result.ifPresent(name -> {
 				try {
-                    getHighScore().addHighScore(score, name);
+                    getHighScore().addHighScore(levelManager.getScore(), name);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -154,8 +144,7 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
 
         gamePane.getChildren().remove(getSceneNodes());
         spriteStore.removeAllSprites();
-        board.resetGrid();
-
+        
         inProgress = false;
         isStop = true;
         isResume = false;
@@ -168,26 +157,27 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
      * @param gamePane The primary scene.
      */
     @Override
-    public void initialise(Board board, Pane gamePane, Label scoreLabel) {
+    public void initialise(Pane gamePane, Label scoreLabel) {
         this.gamePane = gamePane;
         this.scoreLabel = scoreLabel;
-        this.board = board;
+        
+        levelManager = new LevelManager(spriteStore, sceneNodes);
 
         // set initial score
-        scoreLabel.setText(Integer.toString(score));
+        scoreLabel.setText(Integer.toString(levelManager.getScore()));
 
         // draw and stretch the board background
         gamePane.setStyle("-fx-background-image: url('/board.png'); -fx-background-size: cover;");
 
         // start observing the board for callback events
-        board.addObserver(this);
+        levelManager.getBoard().addObserver(this);
 
         // set callback for clicking on the board
         gamePane.addEventFilter(MouseEvent.MOUSE_CLICKED,
                 new EventHandler<MouseEvent>() {
                     public void handle(MouseEvent event) {
                         if (isInProgress() && event.getTarget() instanceof Pane) {
-                            board.boardClicked(true);
+                        	levelManager.getBoard().boardClicked(true);
                         }
                     }
                 }
@@ -200,7 +190,7 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
      */
     protected void updateLogic() {
         if (inProgress) {
-        	board.update();
+        	levelManager.update();
         }
     }
     
@@ -238,15 +228,14 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
 
     @Override
     public void boardJewelRemoved() {
-    	final int point = 10;
-    	score += point; // add 10 points per jewel removed
-        scoreLabel.setText(Integer.toString(score));
+    	levelManager.addScore();
+        scoreLabel.setText(Integer.toString(levelManager.getScore()));
     }
     
     @Override
     public void showHint() {
-    	if (board != null) {
-    		board.showHint();
+    	if (levelManager.getBoard() != null) {
+    		levelManager.getBoard().showHint();
     	}
     }
     
@@ -257,54 +246,42 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
         if (!inProgress || isStop) {
             return;     
         }
+        inProgress = false;
         try {
-        	int frame = super.getFramesPerSecond();
-        	Board boardState = new Board(null, null);
-        	boardState.setState(board.convertGrid());
-            OutputStream file = new FileOutputStream(BOARD_SAVE_FILE);
+        	//Before writing, convert the board to a serializable state
+        	levelManager.getBoard().setState(levelManager.getBoard().convertGrid());
+        	
+            OutputStream file = new FileOutputStream(SAVE_FILE);
             OutputStream buffer = new BufferedOutputStream(file);
             ObjectOutput output = new ObjectOutputStream(buffer);
-            output.writeObject(boardState);
+            output.writeObject(levelManager);
             output.flush();
             output.close();
-            BejeweledGame scoreState = new BejeweledGame(frame, null, null);
-        	scoreState.score = score;
-            OutputStream file2 = new FileOutputStream(SCORE_SAVE_FILE);
-            OutputStream buffer2 = new BufferedOutputStream(file2);
-            ObjectOutput output2 = new ObjectOutputStream(buffer2);
-            output2.writeObject(scoreState);
-            output2.flush(); output2.close();
+       
         } catch (IOException e) {
             e.printStackTrace();
         }      
         gamePane.getChildren().remove(getSceneNodes());
         spriteStore.removeAllSprites();
-        board.resetGrid();
+        levelManager.getBoard().resetGrid();
         Logger.logInfo("Game saved");
         inProgress = false; isStop = true; isResume = true;           
     }
     
     @Override
     public void resume() {
-    	File boardFile = new File(BOARD_SAVE_FILE);
-    	File scoreFile = new File(SCORE_SAVE_FILE);
-        if (inProgress || !isResume || !boardFile.exists() || !scoreFile.exists()) {
+        levelManager.getBoard().clearGrid();
+    	File saveFile = new File(SAVE_FILE);
+        if (inProgress || !isResume || !saveFile.exists() ) {
             return;
         }
-        Board boardState = null; BejeweledGame scoreState = null;
-        InputStream file, file2;       
+        InputStream file;       
        try {
-           file = new FileInputStream(BOARD_SAVE_FILE);
+           file = new FileInputStream(SAVE_FILE);
            InputStream buffer = new BufferedInputStream(file);
            ObjectInput input = new ObjectInputStream(buffer);
-           boardState = (Board) input.readObject();
+           levelManager = (LevelManager) input.readObject();
            input.close();
-           file2 = new FileInputStream(SCORE_SAVE_FILE);
-           InputStream buffer2 = new BufferedInputStream(file2);
-           ObjectInput input2 = new ObjectInputStream(buffer2);
-           scoreState = (BejeweledGame) input2.readObject();
-           score = scoreState.score;
-           input2.close();
        } catch (FileNotFoundException e) {
            e.printStackTrace();
        } catch (IOException e) {
@@ -312,14 +289,11 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
        } catch (ClassNotFoundException e) {
            e.printStackTrace();
        }
-       board.setState(boardState.getState());
-       if (!isStop) {
-    	   board.resetGrid();
-       }
-       board.makeGrid(); 
-      inProgress = true; isResume = false; isStop = false; boardFile.delete(); scoreFile.delete();
+       //Restore the grid from its serialized form
+       levelManager.getBoard().makeGrid(getSceneNodes()); 
+      inProgress = true; isResume = false; isStop = false; saveFile.delete(); 
         Logger.logInfo("Game resumed");       
-       scoreLabel.setText(Integer.toString(score));
+       scoreLabel.setText(Integer.toString(levelManager.getScore()));
        gamePane.getChildren().add(new Scene(getSceneNodes(), gamePane.getWidth(), 
                                            gamePane.getHeight()).getRoot());
     }
@@ -343,10 +317,8 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
      */
     @Override
     public void removeSaveGame() {
-        File boardFile = new File(BOARD_SAVE_FILE);
-        File scoreFile = new File(SCORE_SAVE_FILE);
-        if (boardFile.exists() || scoreFile.exists()
-                && (boardFile.delete() && scoreFile.delete())) {
+        File saveFile = new File(SAVE_FILE);
+        if (saveFile.exists() && saveFile.delete()) {
             Logger.logInfo("Save files deleted.");
         }
     }
@@ -358,20 +330,12 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
     public boolean isInProgress() {
         return inProgress;
     }
+    
+    public LevelManager getLevelManager() {
+		return levelManager;
+	}
 
-    /**
-     * Getter method for the board.
-     * @return The board
-     */
-    public Board getBoard() {
-        return board;
-    }
-
-    /**
-     * Getter method for the score.
-     * @return The current score
-     */
-    public int getScore() {
-        return score;
-    }
+	public void setLevelManager(LevelManager levelManager) {
+		this.levelManager = levelManager;
+	}
 }

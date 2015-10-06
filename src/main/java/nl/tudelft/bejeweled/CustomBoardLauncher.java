@@ -37,8 +37,8 @@ public class CustomBoardLauncher extends Launcher {
      * @param sceneNodes The group containing the jewel nodes.
      * @return The board.
      */
-    @Override
-    public Board makeBoard(BoardFactory boardFactory, Group sceneNodes) {
-        return boardFactory.fromTextGenerateBoard(boardLocation, sceneNodes);
-    }
+//    @Override
+//    public Board makeBoard(BoardFactory boardFactory, Group sceneNodes) {
+ //       return boardFactory.fromTextGenerateBoard(boardLocation, sceneNodes);
+ //   }
 }

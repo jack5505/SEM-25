@@ -73,7 +73,6 @@ public class Launcher extends Application {
      */
     public void launchGame(Stage theStage) {
         Group sceneNodes = new Group();
-        Board board = makeBoard(getBoardFactory(), sceneNodes);
         game = makeGame(FPS_LIMIT, WINDOW_TITLE, SPRITE_STORE);
         game.setSceneNodes(sceneNodes);
 
@@ -81,7 +80,7 @@ public class Launcher extends Application {
         bejeweledGui = new BejeweledGui(game, theStage);
 
         // initialise the game
-        game.initialise(board, bejeweledGui.getBoardPane(), bejeweledGui.getScoreLabel());
+        game.initialise(bejeweledGui.getBoardPane(), bejeweledGui.getScoreLabel());
         if (saveGameExists()) {
             Optional<ButtonType> result = showYesNoDialog("Saved State Available",
                     "Would you like to resume the previous game?");
@@ -112,16 +111,6 @@ public class Launcher extends Application {
     public Game makeGame(int framesPerSecond, String windowTitle, SpriteStore spriteStore) {
         GameFactory gf = new GameFactory(spriteStore);
         return gf.createBejeweledGame(framesPerSecond, windowTitle);
-    }
-
-    /**
-     * Makes a board.
-     * @param boardFactory The BoardFactory object that creates the board.
-     * @param sceneNodes The group of nodes that are presented in the scene.
-     * @return An instantiated board.
-     */
-    public Board makeBoard(BoardFactory boardFactory, Group sceneNodes) {
-        return boardFactory.generateBoard(sceneNodes);
     }
 
     /**
