@@ -72,6 +72,7 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
     private Pane gamePane;
 
     private Label scoreLabel;
+	private Label levelLabel;
 
 
     /**
@@ -157,11 +158,12 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
      * @param gamePane The primary scene.
      */
     @Override
-    public void initialise(Pane gamePane, Label scoreLabel) {
+    public void initialise(Pane gamePane, Label scoreLabel, Label levelLabel) {
         this.gamePane = gamePane;
         this.scoreLabel = scoreLabel;
+        this.levelLabel = levelLabel;
         
-        levelManager = new LevelManager(spriteStore, sceneNodes);
+        levelManager = new LevelManager(spriteStore, sceneNodes, levelLabel);
 
         // set initial score
         scoreLabel.setText(Integer.toString(levelManager.getScore()));
@@ -292,6 +294,8 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
        //Restore the grid from its serialized form
        levelManager.getBoard().makeGrid(getSceneNodes()); 
        levelManager.getBoard().addObserver(this);
+       levelManager.setSceneNodes(getSceneNodes());
+       levelManager.setLevelLabel(levelLabel);
 
       inProgress = true; isResume = false; isStop = false; saveFile.delete(); 
         Logger.logInfo("Game resumed");       

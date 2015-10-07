@@ -95,11 +95,12 @@ public abstract class Game implements Serializable {
 
     /**
      * Initialise the game world by update the JavaFX Stage.
-     * @param board The board of the game.
      * @param gamePane The primary scene.
      * @param scoreLabel The label for the score.
+     * @param levelLabel The label for the level.
+     * @param board The board of the game.
      */
-    public abstract void initialise(Pane gamePane, Label scoreLabel);
+    public abstract void initialise(Pane gamePane, Label scoreLabel, Label levelLabel);
 
     /**Kicks off (plays) the Timeline objects containing one key frame
      * that simply runs indefinitely with each frame invoking a method

@@ -80,7 +80,7 @@ public class Launcher extends Application {
         bejeweledGui = new BejeweledGui(game, theStage);
 
         // initialise the game
-        game.initialise(bejeweledGui.getBoardPane(), bejeweledGui.getScoreLabel());
+        game.initialise(bejeweledGui.getBoardPane(), bejeweledGui.getScoreLabel(), bejeweledGui.getLevelLabel());
         if (saveGameExists()) {
             Optional<ButtonType> result = showYesNoDialog("Saved State Available",
                     "Would you like to resume the previous game?");
