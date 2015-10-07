@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.xml.bind.JAXBException;
 
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -137,6 +138,10 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
             return;
         }
 
+        inProgress = false;
+        isStop = true;
+        isResume = false;
+        
         Logger.logInfo("Final score: " + score);
         int place = getHighScore().isHighScore(score);
         if (place >  0) {
@@ -155,10 +160,6 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
         gamePane.getChildren().remove(getSceneNodes());
         spriteStore.removeAllSprites();
         board.resetGrid();
-
-        inProgress = false;
-        isStop = true;
-        isResume = false;
 
         removeSaveGame();
     }
@@ -226,14 +227,19 @@ public class BejeweledGame extends Game implements BoardObserver, Serializable {
 
             @Override
             public void handle(ActionEvent event) {
-                gamePane.getChildren().remove(label);
+            	Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                    	gamePane.getChildren().remove(label); 
+                    	Logger.logInfo("Out of moves!");
+
+                    	stop();
+                    }
+                });
+                
             }
         });
         ft.play();
-        
-        Logger.logInfo("Out of moves!");
-
-    	stop();
     }
 
     @Override
