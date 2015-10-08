@@ -135,12 +135,8 @@ public class Launcher extends Application {
      * @return True if and only if save game files are both present.
      */
     public boolean saveGameExists() {
-        File boardFile = new File("board.mine");
-        File scoreFile = new File("score.mine");
-        if (boardFile.exists() && scoreFile.exists()) {
-            return true;
-        }
-        return false;
+        File saveFile = new File("save.mine");
+        return saveFile.exists();
     }
 
     /**
