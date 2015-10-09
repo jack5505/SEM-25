@@ -121,36 +121,35 @@ public class Board implements Serializable {
      */
     public void addSelection(Jewel jewel) {
     	if (!isLocked()) {
-            return;
-        }
-	        getSelection().add(jewel);
-	        //TODO Cleanup this method with better logic.
-	        if (getSelection().size() == 1) {
-	           selectionCursor = new SelectionCursor(getSelection().get(0).getxPos(), 
-	        		   getSelection().get(0).getyPos());
-	           spriteStore.addSprites(getSelectionCursor());
-	           sceneNodes.getChildren().add(0, getSelectionCursor().getNode());
-	        }
-	        // 2 gems are selected, see if any combo's are made
-	        if (getSelection().size() == 2) {
-	
-	            if (moveWithinDomain(getSelection().get(0), getSelection().get(1))) {
-	                Logger.logInfo("Swapping jewels " + getSelection().get(0).toString()
-	                		+ " and " + getSelection().get(1).toString());
-	                swapJewel(getSelection().get(0), getSelection().get(1));
-	
-	                int comboCount = checkBoardCombos();
-	                Logger.logInfo("Combo Jewels on board: " + comboCount);
-	                if (comboCount == 0) {
-	                	setToReverse(getSelection().get(0), getSelection().get(1));
-	                }
-	            }
-	            sceneNodes.getChildren().remove(getSelectionCursor().getNode());
-	            selectionCursor = null;
-	            getSelection().clear();
-	        }
+    		getSelection().add(jewel);
+    		//TODO Cleanup this method with better logic.
+    		if (getSelection().size() == 1) {
+    			selectionCursor = new SelectionCursor(getSelection().get(0).getxPos(), 
+    					getSelection().get(0).getyPos());
+    			spriteStore.addSprites(getSelectionCursor());
+    			sceneNodes.getChildren().add(0, getSelectionCursor().getNode());
+    		}
+    		// 2 gems are selected, see if any combo's are made
+    		if (getSelection().size() == 2) {
+
+    			if (moveWithinDomain(getSelection().get(0), getSelection().get(1))) {
+    				Logger.logInfo("Swapping jewels " + getSelection().get(0).toString()
+    						+ " and " + getSelection().get(1).toString());
+    				swapJewel(getSelection().get(0), getSelection().get(1));
+
+    				int comboCount = checkBoardCombos();
+    				Logger.logInfo("Combo Jewels on board: " + comboCount);
+    				if (comboCount == 0) {
+    					setToReverse(getSelection().get(0), getSelection().get(1));
+    				}
+    			}
+    			sceneNodes.getChildren().remove(getSelectionCursor().getNode());
+    			selectionCursor = null;
+    			getSelection().clear();
+    		}
     	}
-    
+    }
+
 	/**
      * Set up two jewels to be swapped, intended to undo an invalid move.
      * @param jewel1 The first Jewel.
