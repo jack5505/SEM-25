@@ -2,6 +2,8 @@ package nl.tudelft.bejeweled.game;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
@@ -13,14 +15,15 @@ import javafx.scene.text.Font;
 import javafx.util.Duration;
 import nl.tudelft.bejeweled.board.Board;
 import nl.tudelft.bejeweled.board.BoardFactory;
+import nl.tudelft.bejeweled.board.BoardObserver;
 import nl.tudelft.bejeweled.logger.Logger;
 import nl.tudelft.bejeweled.sprite.SpriteStore;
 
 /**
  * Created by Pim on 6-10-2015.
- * The LevelManager manages the board and the score to realize progression through different levels.
+ * The Session manages the board and the score to realize progression through different levels.
  */
-public class LevelManager implements Serializable {
+public class Session implements Serializable, BoardObserver {
 
 	private Board board;
 	
@@ -31,15 +34,16 @@ public class LevelManager implements Serializable {
     private static final int TEXT_DURATION = 4000;
     private static final int TEXT_XPOS = 100;
     private static final int TEXT_YPOS = 200;
-
+   
 	private BoardFactory boardFactory;
 	private SpriteStore spriteStore;
 	
 	private int score;
 	private int level;
 
-	transient Label levelLabel;
 	transient Group sceneNodes;
+	
+    private transient List<SessionObserver> observers;
 
 	/**
      * Constructor for the level manager.
@@ -47,33 +51,42 @@ public class LevelManager implements Serializable {
      * @param sceneNodes The JavaFX group container for the Jewel Nodes.
 	 * @param levelLabel 
      */
-	public LevelManager(SpriteStore spriteStore, Group sceneNodes, Label levelLabel) {
+	public Session(SpriteStore spriteStore, Group sceneNodes) {
 		this.spriteStore = spriteStore;
 		this.sceneNodes = sceneNodes;
-		this.levelLabel = levelLabel;
+		observers = new ArrayList<>();
+
+        
 		boardFactory = new BoardFactory(spriteStore);
 		setBoard(boardFactory.generateBoard(sceneNodes));
-	}
-	
-	/**
-	* Setup a new game in terms of level and score.
-	*/
-	public void newGame() {
-		resetLevel();
-		score = 0;
-		level = 1;
-		levelLabel.setText(Integer.toString(level));
-	}
+		 // start observing the board for callback events
+        board.addObserver(this);
+        setScore(0);
+		setLevel(1);
+    }
 
-	/**
-	 * Reset to a new level.
-	 */
-	private void resetLevel() {
-		board.clearGrid();
-		board.fillNullSpots();
-	}
+    /**
+     * Adds an observer of the session.
+     * @param observer BoardObserver to be added to the list of observers
+     */
+    public void addObserver(SessionObserver observer) {
+    	if (observers == null) {
+            observers = new ArrayList<>();
+    	}
+    	if (!observers.contains(observer)) {
+    		observers.add(observer);
+    	}
+    }
+    
+    
+    /**
+     * Removes an observer of the session.
+     * @param observer SessionObserver to be removed
+     */
+    public void removeObserver(SessionObserver observer) {
+    	observers.remove(observer);
+    }
 
-	
 	/**
 	 * Progress to a new level.
 	 */
@@ -93,8 +106,11 @@ public class LevelManager implements Serializable {
 	 * Sets the current score.
 	 * @param score the score to be set
 	 */
-	void setScore(int score) {
+	private void setScore(int score) {
 		this.score = score;
+		for (SessionObserver observer : observers) {
+            observer.updateScore();
+      }
 	}
 
 	/**
@@ -103,12 +119,14 @@ public class LevelManager implements Serializable {
 	public void update() {
 		getBoard().update();
 
-		int target = BASE_TARGET_POINTS * level * level;
+		int target = BASE_TARGET_POINTS * getLevel() * getLevel();
 		if (score >= target) {
-			level++;
+			setLevel(getLevel() + 1);
 			newLevel();
-			levelLabel.setText(Integer.toString(level));
-			displayText("LEVEL "+level);
+			for (SessionObserver observer : observers) {
+	            observer.updateLevel();
+	      }
+			displayText("LEVEL " + getLevel());
 		}
 	}
 
@@ -142,18 +160,8 @@ public class LevelManager implements Serializable {
 	//TODO implement more complex scoring
 	public void addScore() {
 		final int point = 10;
-		score += point * level; // add 10 points per jewel removed
-
-	}
-	
-	
-	/**
-	 * Sets the levelLabel.
-	 * @param levelLabel Label to display the level in the window
-	 */
-	public void setLevelLabel(Label levelLabel) {
-		this.levelLabel = levelLabel;
-		levelLabel.setText(Integer.toString(level));
+		setScore(getScore() + point * getLevel()); // add 10 points per jewel removed
+		
 	}
 	
 	
@@ -163,6 +171,8 @@ public class LevelManager implements Serializable {
 	 * @param text String to be shown
 	 */
 	public void displayText(String text) {
+        Logger.logInfo("Display: " + text);
+
 		final Label label = new Label(text);
 
         label.setFont(new Font("Arial", TEXT_SIZE));
@@ -186,5 +196,38 @@ public class LevelManager implements Serializable {
             }
         });
         ft.play();
+	}
+	
+    @Override
+    public void boardOutOfMoves() {
+
+    	displayText("Out of moves!");      
+    	for (SessionObserver observer : observers) {
+              observer.gameOver();
+        }
+    }
+
+    @Override
+    public void boardJewelRemoved() {
+    	addScore();
+    }
+    
+    public void lockBoard(){
+    	board.setLocked(true);
+    }
+    
+    public void unlockBoard(){
+    	board.setLocked(false);
+    }
+
+	public int getLevel() {
+		return level;
+	}
+
+	private void setLevel(int level) {
+		this.level = level;
+		for (SessionObserver observer : observers) {
+            observer.updateLevel();
+      }
 	}
 }

@@ -50,6 +50,7 @@ public class Board implements Serializable {
 	private transient Jewel reverse1;
 	private transient Jewel reverse2;
 	private int[][] state;
+	private boolean locked = false;
 
     /**
      * Constructor for the board class.
@@ -118,34 +119,34 @@ public class Board implements Serializable {
      * @param jewel The Jewel to be added to the current selection.
      */
     public void addSelection(Jewel jewel) {
-        getSelection().add(jewel);
-        //TODO Cleanup this method with better logic.
-        if (getSelection().size() == 1) {
-           selectionCursor = new SelectionCursor(getSelection().get(0).getxPos(), 
-        		   getSelection().get(0).getyPos());
-           spriteStore.addSprites(getSelectionCursor());
-           sceneNodes.getChildren().add(0, getSelectionCursor().getNode());
-        }
-        
-        // 2 gems are selected, see if any combo's are made
-        if (getSelection().size() == 2) {
-
-            if (moveWithinDomain(getSelection().get(0), getSelection().get(1))) {
-                Logger.logInfo("Swapping jewels " + getSelection().get(0).toString()
-                		+ " and " + getSelection().get(1).toString());
-                swapJewel(getSelection().get(0), getSelection().get(1));
-
-                int comboCount = checkBoardCombos();
-                Logger.logInfo("Combo Jewels on board: " + comboCount);
-                if (comboCount == 0) {
-                	setToReverse(getSelection().get(0), getSelection().get(1));
-                }
-
-            }
-            sceneNodes.getChildren().remove(getSelectionCursor().getNode());
-            selectionCursor = null;
-            getSelection().clear();
-        }
+    	if (!isLocked()) {
+	        getSelection().add(jewel);
+	        //TODO Cleanup this method with better logic.
+	        if (getSelection().size() == 1) {
+	           selectionCursor = new SelectionCursor(getSelection().get(0).getxPos(), 
+	        		   getSelection().get(0).getyPos());
+	           spriteStore.addSprites(getSelectionCursor());
+	           sceneNodes.getChildren().add(0, getSelectionCursor().getNode());
+	        }
+	        // 2 gems are selected, see if any combo's are made
+	        if (getSelection().size() == 2) {
+	
+	            if (moveWithinDomain(getSelection().get(0), getSelection().get(1))) {
+	                Logger.logInfo("Swapping jewels " + getSelection().get(0).toString()
+	                		+ " and " + getSelection().get(1).toString());
+	                swapJewel(getSelection().get(0), getSelection().get(1));
+	
+	                int comboCount = checkBoardCombos();
+	                Logger.logInfo("Combo Jewels on board: " + comboCount);
+	                if (comboCount == 0) {
+	                	setToReverse(getSelection().get(0), getSelection().get(1));
+	                }
+	            }
+	            sceneNodes.getChildren().remove(getSelectionCursor().getNode());
+	            selectionCursor = null;
+	            getSelection().clear();
+	        }
+    	}
     }
     
 	/**
@@ -357,7 +358,7 @@ public class Board implements Serializable {
             // TODO Make sure the Jewels are also removed from the spriteStore.
             // grid[jewel.getBoardX()][jewel.getBoardY()] = null;
         }
-        outOfMoves();
+  //      outOfMoves();
         return count;
     }
     
@@ -777,6 +778,7 @@ public class Board implements Serializable {
 			} else {
 				checkBoardCombos();
 				updateJewelPositions();
+				outOfMoves();
 			}
 		}
 	}
@@ -934,6 +936,14 @@ public class Board implements Serializable {
                 );
             }
         }
+	}
+
+	public boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(boolean locked) {
+		this.locked = locked;
 	}
 	
 }
