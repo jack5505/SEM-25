@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.xml.bind.JAXBException;
 
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -113,6 +114,7 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
         session.lockBoard();
         Logger.logInfo("Final score: " + session.getScore());
         int place = getHighScore().isHighScore(session.getScore());
+       
         if (place >  0) {
         	Optional<String> result = showTextInputDialog("Enter your name",
                     "Congratulations, you achieved a highscore." + " Please enter your name:");
@@ -163,9 +165,19 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
         	session.update();
     	}
     }
-    
+    /*
+            	Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
 
-    
+                    }
+                });
+                
+            }
+        });
+        ft.play();
+    */
+        
     @Override
     public void showHint() {
     	if (session.getBoard() != null) {

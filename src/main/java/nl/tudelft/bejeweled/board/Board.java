@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -120,6 +121,8 @@ public class Board implements Serializable {
      */
     public void addSelection(Jewel jewel) {
     	if (!isLocked()) {
+            return;
+        }
 	        getSelection().add(jewel);
 	        //TODO Cleanup this method with better logic.
 	        if (getSelection().size() == 1) {
@@ -147,7 +150,6 @@ public class Board implements Serializable {
 	            getSelection().clear();
 	        }
     	}
-    }
     
 	/**
      * Set up two jewels to be swapped, intended to undo an invalid move.
@@ -358,7 +360,7 @@ public class Board implements Serializable {
             // TODO Make sure the Jewels are also removed from the spriteStore.
             // grid[jewel.getBoardX()][jewel.getBoardY()] = null;
         }
-  //      outOfMoves();
+
         return count;
     }
     
