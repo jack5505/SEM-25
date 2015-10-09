@@ -4,9 +4,6 @@ import java.util.Optional;
 
 import javax.xml.bind.JAXBException;
 
-import javafx.animation.FadeTransition;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -15,11 +12,6 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Font;
-import javafx.util.Duration;
-import nl.tudelft.bejeweled.board.Board;
-import nl.tudelft.bejeweled.board.BoardFactory;
-import nl.tudelft.bejeweled.board.BoardObserver;
 import nl.tudelft.bejeweled.logger.Logger;
 import nl.tudelft.bejeweled.sprite.SpriteStore;
 
@@ -163,7 +155,7 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
      * the board that is loaded for the game if the game is in progress.
      */
     protected void updateLogic() {
-    	if(session != null) {
+    	if (session != null) {
         	session.update();
     	}
     }
@@ -192,7 +184,7 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
 	@Override
     public void save() { 
     	if (session != null) {
-    		if(session.getBoard().isLocked()){
+    		if (session.getBoard().isLocked()) {
     			return;
     		}
 	    	session.lockBoard();
@@ -218,33 +210,19 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
     
     @Override
     public void resume() {
+    	 File saveFile = new File(SAVE_FILE);
+         if (!saveFile.exists()) {
+             return;
+         }
     	//Clean up existing sprites
     	gamePane.getChildren().remove(getSceneNodes());
         spriteStore.removeAllSprites();
-       // session.getBoard().clearGrid();
-    	File saveFile = new File(SAVE_FILE);
-        if (!saveFile.exists() ) {
-            return;
-        }
-        InputStream file;       
-       try {
-           file = new FileInputStream(SAVE_FILE);
-           InputStream buffer = new BufferedInputStream(file);
-           ObjectInput input = new ObjectInputStream(buffer);
-           session = (Session) input.readObject();
-           session.addObserver(this);
-           input.close();
-       } catch (FileNotFoundException e) {
-           e.printStackTrace();
-       } catch (IOException e) {
-           e.printStackTrace();
-       } catch (ClassNotFoundException e) {
-           e.printStackTrace();
-       }
+      
+    	session = readSessionFromFile(SAVE_FILE);
+        session.addObserver(this);
        //Restore the grid from its serialized form
        session.getBoard().makeGrid(getSceneNodes()); 
        session.unlockBoard();
-     //  levelManager.getBoard().addObserver(this);
        session.setSceneNodes(getSceneNodes());
        updateLevel();
        updateScore();
@@ -256,6 +234,30 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
                                            gamePane.getHeight()).getRoot());
     }
 
+    /**
+     * Read a session from a file. The file must be a session saved in a compatible serialized form.
+     * @param fileName the file to read from.
+     * @return the saved session.
+     */
+    public Session readSessionFromFile(String fileName) {
+    	Session session = null;
+        InputStream file;       
+       try {
+           file = new FileInputStream(fileName);
+           InputStream buffer = new BufferedInputStream(file);
+           ObjectInput input = new ObjectInputStream(buffer);
+           session = (Session) input.readObject();
+           input.close();
+       } catch (FileNotFoundException e) {
+           e.printStackTrace();
+       } catch (IOException e) {
+           e.printStackTrace();
+       } catch (ClassNotFoundException e) {
+           e.printStackTrace();
+       }
+       return session;
+    }
+    
     /**
      * Shows a text input dialog.
      * @param title Title of the dialog.
@@ -282,10 +284,18 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
     }
 
     
+    /**
+     * Returns the current session.
+     * @return the current session.
+     */
     public Session getSession() {
 		return session;
 	}
 
+    /**
+     * Set the current session.
+     * @param session the session to be set.
+     */
 	public void setSession(Session session) {
 		this.session = session;
 	}
@@ -305,6 +315,10 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
         levelLabel.setText(Integer.toString(session.getLevel()));		
 	}
 
+	/**
+	 * Returns whether the game is currently in progress.
+	 * @return whether the game is currently in progress.
+	 */
 	public boolean isInProgress() {
 		return (session != null);
 	}

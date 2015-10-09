@@ -12,12 +12,12 @@ public interface SessionObserver {
     void gameOver();
     
     /**
-     * Update Score
+     * Update the Score label.
      */
     void updateScore();
     
     /**
-     * Update Level
+     * Update the Level label.
      */
     void updateLevel();
     

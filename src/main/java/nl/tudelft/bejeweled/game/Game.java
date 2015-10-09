@@ -9,7 +9,6 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import nl.tudelft.bejeweled.board.Board;
 import nl.tudelft.bejeweled.sprite.Sprite;
 import nl.tudelft.bejeweled.sprite.SpriteStore;
 
@@ -98,7 +97,6 @@ public abstract class Game implements Serializable {
      * @param gamePane The primary scene.
      * @param scoreLabel The label for the score.
      * @param levelLabel The label for the level.
-     * @param board The board of the game.
      */
     public abstract void initialise(Pane gamePane, Label scoreLabel, Label levelLabel);
 

@@ -158,8 +158,10 @@ public class Jewel extends Sprite {
         }
     }
     
-  
-    
+  /**
+   * Animate a fade in for the Jewel.
+   * @param sceneGroup the sceneGroup which displays the jewel fading in.
+   */
     public void fadeIn(Group sceneGroup) {
         setState(SpriteState.ANIMATION_ACTIVE);
         setvX(0);

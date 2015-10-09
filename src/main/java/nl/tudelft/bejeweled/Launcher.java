@@ -8,7 +8,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import nl.tudelft.bejeweled.board.Board;
 import nl.tudelft.bejeweled.board.BoardFactory;
 import nl.tudelft.bejeweled.game.Game;
 import nl.tudelft.bejeweled.game.GameFactory;
@@ -80,7 +79,8 @@ public class Launcher extends Application {
         bejeweledGui = new BejeweledGui(game, theStage);
 
         // initialise the game
-        game.initialise(bejeweledGui.getBoardPane(), bejeweledGui.getScoreLabel(), bejeweledGui.getLevelLabel());
+        game.initialise(bejeweledGui.getBoardPane(), bejeweledGui.getScoreLabel(),
+        		bejeweledGui.getLevelLabel());
         if (saveGameExists()) {
             Optional<ButtonType> result = showYesNoDialog("Saved State Available",
                     "Would you like to resume the previous game?");

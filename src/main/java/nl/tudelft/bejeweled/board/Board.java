@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
-import java.util.concurrent.TimeUnit;
 
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -738,7 +737,7 @@ public class Board implements Serializable {
     /**
      * Clears the grid and removes the jewels from the scenegroup.
      */
-    public void clearGrid(){
+    public void clearGrid() {
         for (int x = 0; x < grid.length; x++) {
             for (int y = 0; y < grid[x].length; y++) {
             	if (grid[x][y] != null) {
@@ -911,7 +910,7 @@ public class Board implements Serializable {
 	
     /**
      * Make grid from saved state.
-     *
+     * @param sceneNodes the sceneNodes used for the display of the jewels.
      */
 	public void makeGrid(Group sceneNodes) {
         this.observers = new ArrayList<>();
@@ -939,10 +938,18 @@ public class Board implements Serializable {
         }
 	}
 
+	/**
+	 * Test whether the board is locked for modification.
+	 * @return whether the board is locked for modification.
+	 */
 	public boolean isLocked() {
 		return locked;
 	}
 
+	/**
+	 * Lock or unlock the board for modification.
+	 * @param locked true if the board is to be locked
+	 */
 	public void setLocked(boolean locked) {
 		this.locked = locked;
 	}

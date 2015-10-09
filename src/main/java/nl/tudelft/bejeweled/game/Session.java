@@ -214,14 +214,24 @@ public class Session implements Serializable, BoardObserver {
     	addScore();
     }
     
-    public void lockBoard(){
+    /**
+     * Prevent the board from being modified.
+     */
+    public void lockBoard() {
     	board.setLocked(true);
     }
     
-    public void unlockBoard(){
+    /**
+     * Re-enable modification of the board.
+     */
+    public void unlockBoard() {
     	board.setLocked(false);
     }
 
+    /**
+     * Returns the current level.
+     * @return the current level.
+     */
 	public int getLevel() {
 		return level;
 	}
