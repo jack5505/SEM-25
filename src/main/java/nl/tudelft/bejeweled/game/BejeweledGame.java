@@ -282,12 +282,12 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
     }
 
     
-    public Session getLevelManager() {
+    public Session getSession() {
 		return session;
 	}
 
-	public void setLevelManager(Session levelManager) {
-		this.session = levelManager;
+	public void setSession(Session session) {
+		this.session = session;
 	}
 
 	@Override
