@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Created by Pim on 9-10-2015.
  * Test class for the Session class.
  */
 public class SessionTest {

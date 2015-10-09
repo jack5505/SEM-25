@@ -25,6 +25,11 @@ import nl.tudelft.bejeweled.sprite.SpriteStore;
  */
 public class Session implements Serializable, BoardObserver {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1775959171332511193L;
+
 	private Board board;
 	
 	private static final int BASE_TARGET_POINTS = 500;
@@ -36,12 +41,11 @@ public class Session implements Serializable, BoardObserver {
     private static final int TEXT_YPOS = 200;
    
 	private BoardFactory boardFactory;
-	private SpriteStore spriteStore;
 	
 	private int score;
 	private int level;
 
-	transient Group sceneNodes;
+	private transient Group sceneNodes;
 	
     private transient List<SessionObserver> observers;
 
@@ -49,10 +53,8 @@ public class Session implements Serializable, BoardObserver {
      * Constructor for the level manager.
      * @param spriteStore Managing class for all the sprites in the game.
      * @param sceneNodes The JavaFX group container for the Jewel Nodes.
-	 * @param levelLabel 
      */
 	public Session(SpriteStore spriteStore, Group sceneNodes) {
-		this.spriteStore = spriteStore;
 		this.sceneNodes = sceneNodes;
 		observers = new ArrayList<>();
 
