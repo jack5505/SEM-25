@@ -32,7 +32,7 @@ public class LauncherTest extends ApplicationTest {
      */
     @After
     public void tearDown() {
-        closeCurrentWindow();
+     //   closeCurrentWindow();
     }
 
     /**
