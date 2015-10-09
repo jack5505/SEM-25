@@ -27,7 +27,7 @@ public class Session implements Serializable, BoardObserver {
 
 	private Board board;
 	
-	private static final int BASE_TARGET_POINTS = 100;
+	private static final int BASE_TARGET_POINTS = 500;
 	
 	// Text parameters
 	private static final int TEXT_SIZE = 55;
