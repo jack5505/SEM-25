@@ -111,10 +111,11 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
      */
     @Override
     public void stop() {
-        session.lockBoard();
+        if (session != null) {
+        	session.lockBoard();
+
         Logger.logInfo("Final score: " + session.getScore());
-        int place = getHighScore().isHighScore(session.getScore());
-       
+        int place = getHighScore().isHighScore(session.getScore());   
         if (place >  0) {
         	Optional<String> result = showTextInputDialog("Enter your name",
                     "Congratulations, you achieved a highscore." + " Please enter your name:");
