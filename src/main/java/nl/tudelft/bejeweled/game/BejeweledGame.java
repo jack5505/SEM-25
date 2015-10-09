@@ -129,6 +129,7 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
         }
         Logger.logInfo("Game stopped");
         removeSaveGame();
+        }
     }
 
 
@@ -191,6 +192,9 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
 	@Override
     public void save() { 
     	if (session != null) {
+    		if(session.getBoard().isLocked()){
+    			return;
+    		}
 	    	session.lockBoard();
 	        try {
 	        	//Before writing, convert the board to a serializable state
