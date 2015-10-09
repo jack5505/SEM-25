@@ -31,8 +31,6 @@ public class Board implements Serializable {
 	private int spriteHeight;
 	private static final int MINIMAL_COMBO_LENGTH = 3;
 	public static final int NUMBER_OF_JEWEL_TYPES = 7;
-	private static final int GRID_WIDTH = 8;
-
 
     private List<Jewel> selection = new ArrayList<Jewel>();
     
@@ -898,9 +896,9 @@ public class Board implements Serializable {
 	 * @return processed grid
 	 */
 	public int[][] convertGrid() {
-		int[][] mGrid = new int[GRID_WIDTH][GRID_WIDTH]; 
-		for (int i = 0; i < GRID_WIDTH; i++) {
-			for (int j = 0; j < GRID_WIDTH; j++) {
+		int[][] mGrid = new int[gridWidth][gridHeight]; 
+		for (int i = 0; i < gridWidth; i++) {
+			for (int j = 0; j < gridHeight; j++) {
 				mGrid[i][j] = grid[i][j].getType();  
 			}	
 		}
@@ -914,10 +912,10 @@ public class Board implements Serializable {
      */
 	public void makeGrid(Group sceneNodes) {
         this.observers = new ArrayList<>();
-		grid = new Jewel[GRID_WIDTH][GRID_WIDTH];
+		grid = new Jewel[gridWidth][gridHeight];
 		this.sceneNodes = sceneNodes;
-		for (int i = 0; i < GRID_WIDTH; i++) {
-            for (int j = 0; j < GRID_WIDTH; j++) {
+		for (int i = 0; i < gridWidth; i++) {
+            for (int j = 0; j < gridHeight; j++) {
                Jewel jewel = new Jewel(state[i][j], i, j); 
                 jewel.setxPos(i * spriteWidth); 
                 jewel.setyPos(j * spriteHeight); 
