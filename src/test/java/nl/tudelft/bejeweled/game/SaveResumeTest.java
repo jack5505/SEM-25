@@ -28,7 +28,7 @@ public class SaveResumeTest extends ApplicationTest {
      */
     @After
     public void tearDown() {
-        closeCurrentWindow();
+      //  closeCurrentWindow();
     }
     
     /**
