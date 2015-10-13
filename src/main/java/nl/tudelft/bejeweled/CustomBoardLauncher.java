@@ -48,6 +48,6 @@ public class CustomBoardLauncher extends Launcher {
      */
     public Game makeGame(int framesPerSecond, String windowTitle, SpriteStore spriteStore) {
         GameFactory gf = new GameFactory(spriteStore);
-        return gf.createCustomBoardBejeweledGame(framesPerSecond, windowTitle, boardLocation);
+        return gf.createBejeweledGame(framesPerSecond, windowTitle, boardLocation);
     }
 }

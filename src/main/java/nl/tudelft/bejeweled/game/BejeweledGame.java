@@ -52,6 +52,7 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
     private Label scoreLabel;
 	private Label levelLabel;
 
+	private String boardLocation;
 
     /**
      * The constructor for the bejeweled game.
@@ -73,6 +74,29 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
         }
     }
     
+    /**
+     * Alternative constructor for the bejeweled game to launch 
+     * with a custom board used for testing.
+     * @param framesPerSecond - The number of frames per second the game will attempt to render.
+     * @param windowTitle - The title displayed in the window.
+     * @param spriteStore - The spriteStore.
+     * @param boardLocation The location of the boardfile to be used 
+     * to create the board at the start of this session.
+    */
+    public BejeweledGame(int framesPerSecond, String windowTitle, SpriteStore spriteStore, String boardLocation) {
+        super(framesPerSecond, windowTitle);
+        this.boardLocation = boardLocation;
+        this.spriteStore = spriteStore;
+        try {
+        	setHighScore(new HighScore());
+        
+        	getHighScore().loadHighScores();
+        }
+        catch (JAXBException ex) {
+        	ex.printStackTrace();
+        	Logger.logError("HighScore system encountered an error");
+        }
+    }
 
      /**
      *  Starts the game.
@@ -85,7 +109,11 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
         spriteStore.removeAllSprites();    
         
         sceneNodes = new Group();
-        session = new Session(spriteStore, sceneNodes);
+        if (boardLocation == null) {
+        	session = new Session(spriteStore, sceneNodes);
+        } else {
+        	session = new Session(spriteStore, sceneNodes, boardLocation);
+        }
         session.addObserver(this);
         updateLevel();
         updateScore();
