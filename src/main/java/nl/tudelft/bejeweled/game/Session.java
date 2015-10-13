@@ -66,6 +66,27 @@ public class Session implements Serializable, BoardObserver {
         setScore(0);
 		setLevel(1);
     }
+	
+	/**
+     * Alternative constructor for the level manager, setting a certain board.
+     * Primarily used for testing purposes.
+     * @param spriteStore Managing class for all the sprites in the game.
+     * @param sceneNodes The JavaFX group container for the Jewel Nodes.
+     * @param boardLocation The location of the boardfile to be used 
+     * to create the board at the start of this session.
+     */
+	public Session(SpriteStore spriteStore, Group sceneNodes, String boardLocation) {
+		this.sceneNodes = sceneNodes;
+		observers = new ArrayList<>();
+
+        
+		boardFactory = new BoardFactory(spriteStore);
+		setBoard(boardFactory.fromTextGenerateBoard(boardLocation, sceneNodes));
+		 // start observing the board for callback events
+        board.addObserver(this);
+        setScore(0);
+		setLevel(1);
+    }
 
     /**
      * Adds an observer of the session.

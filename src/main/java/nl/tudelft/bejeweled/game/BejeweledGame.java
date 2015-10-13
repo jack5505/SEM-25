@@ -43,11 +43,11 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
 
     private static final String SAVE_FILE = "save.mine";
 
-    private Session session;
+    protected Session session;
 
-	private SpriteStore spriteStore;
+	protected SpriteStore spriteStore;
 
-    private Pane gamePane;
+    protected Pane gamePane;
 
     private Label scoreLabel;
 	private Label levelLabel;
@@ -72,8 +72,9 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
         	Logger.logError("HighScore system encountered an error");
         }
     }
+    
 
-    /**
+     /**
      *  Starts the game.
      */
     @Override
