@@ -31,7 +31,7 @@ public class Session implements Serializable, BoardObserver {
 	private static final long serialVersionUID = -1775959171332511193L;
 
 	private Board board;
-	
+
 	private static final int BASE_TARGET_POINTS = 500;
 	
 	// Text parameters

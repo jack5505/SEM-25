@@ -159,18 +159,6 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
         	session.update();
     	}
     }
-    /*
-            	Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-
-                    }
-                });
-                
-            }
-        });
-        ft.play();
-    */
         
     @Override
     public void showHint() {
@@ -178,8 +166,7 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
     		session.getBoard().showHint();
     	}
     }
-    
-    
+
     @SuppressWarnings("restriction")
 	@Override
     public void save() { 

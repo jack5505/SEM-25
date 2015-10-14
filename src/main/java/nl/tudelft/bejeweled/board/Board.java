@@ -32,9 +32,7 @@ public class Board implements Serializable {
 	private static final int MINIMAL_COMBO_LENGTH = 3;
 	public static final int NUMBER_OF_JEWEL_TYPES = 7;
 
-    private List<Jewel> selection = new ArrayList<Jewel>();
-    
-    private Random rand = new Random();
+    private List<Jewel> selection = new ArrayList<>();
     
     private transient Jewel[][] grid;
 
@@ -77,15 +75,6 @@ public class Board implements Serializable {
     	if (!observers.contains(observer)) {
     		observers.add(observer);
     	}
-    }
-    
-    
-    /**
-     * Removes an observer of the board.
-     * @param observer BoardObserver to be removed
-     */
-    public void removeObserver(BoardObserver observer) {
-    	observers.remove(observer);
     }
 
     /**
@@ -182,7 +171,7 @@ public class Board implements Serializable {
      * @param j2 The second Jewel.
      * @return True if the Jewels can be swapped.
      */
-    public Boolean moveWithinDomain(Jewel j1, Jewel j2) {
+    private Boolean moveWithinDomain(Jewel j1, Jewel j2) {
         if (Math.abs(j1.getBoardX() - j2.getBoardX()) 
         		+ Math.abs(j1.getBoardY() - j2.getBoardY()) == 1) {
             return true;
@@ -237,7 +226,7 @@ public class Board implements Serializable {
      * @param j1 First Jewel to be swapped.
      * @param j2 Second Jewel to be swapped.
      */
-    public void swapJewel(Jewel j1, Jewel j2) {
+    private void swapJewel(Jewel j1, Jewel j2) {
         // TODO This can probably be done nicer
         int x1, x2, y1, y2;
         x1 = j1.getBoardX();
@@ -486,7 +475,7 @@ public class Board implements Serializable {
      * @param y y-position of the first jewel of the pair to be extended
      * @return a list of the coordinates of the Jewels (x1,y1,x2,y2)
      */
-    public List<Integer> validMove(Jewel[][] jewels, int x, int y) {
+    private List<Integer> validMove(Jewel[][] jewels, int x, int y) {
     	final int three = 3;
 		if (checkLeft(jewels, x, y)) {
 			return Arrays.asList(x, y - 1, x, y - 2);
@@ -650,21 +639,22 @@ public class Board implements Serializable {
      * @param j Grid row
      */
     protected void addRandomJewel(int i, int j) {
-    	  Jewel jewel = new Jewel(rand.nextInt(NUMBER_OF_JEWEL_TYPES) + 1, i, j);
-          jewel.setxPos(i * spriteWidth);
-          jewel.setyPos(j * spriteHeight);
-          grid[i][j] = jewel;
-          spriteStore.addSprites(jewel);
-          sceneNodes.getChildren().add(0, jewel.getNode());
-          setSpriteStore(spriteStore);
-          grid[i][j].getNode().addEventFilter(MouseEvent.MOUSE_CLICKED,
-                  new EventHandler<MouseEvent>() {
-                      public void handle(MouseEvent event) {
-                          addSelection(jewel);
-                          event.consume();
-                      }
-                  }
-          );
+        Random rand = new Random();
+        Jewel jewel = new Jewel(rand.nextInt(NUMBER_OF_JEWEL_TYPES) + 1, i, j);
+        jewel.setxPos(i * spriteWidth);
+        jewel.setyPos(j * spriteHeight);
+        grid[i][j] = jewel;
+        spriteStore.addSprites(jewel);
+        sceneNodes.getChildren().add(0, jewel.getNode());
+        setSpriteStore(spriteStore);
+        grid[i][j].getNode().addEventFilter(MouseEvent.MOUSE_CLICKED,
+            new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    addSelection(jewel);
+                    event.consume();
+                }
+            }
+        );
     }
     
     /**
@@ -689,7 +679,7 @@ public class Board implements Serializable {
      * Jewels with empty spots under them are moved down, 
      * and the empty positions are filled with new jewels
      */
-    public void updateJewelPositions() {
+    private void updateJewelPositions() {
     	for (int i = 0; i < gridWidth; i++) {	
     		int emptySpots = 0;
     		for (int j = gridHeight - 1; j >= 0; j--) {
@@ -719,44 +709,6 @@ public class Board implements Serializable {
         	jewel.getNode().setTranslateY(-spots * this.spriteHeight);
     }
 
-    	
-    /**
-     * This function fills the null spots in the grid[][] with Jewels
-     * at the start of the game.
-     */
-    public void fillNullSpots() {
-        for (int x = 0; x < grid.length; x++) {
-            for (int y = 0; y < grid[x].length; y++) {
-                if (grid[x][y] == null) {
-                    addRandomJewel(x, y);                
-                }
-            }
-        }
-    }
-    
-    /**
-     * Clears the grid and removes the jewels from the scenegroup.
-     */
-    public void clearGrid() {
-        for (int x = 0; x < grid.length; x++) {
-            for (int y = 0; y < grid[x].length; y++) {
-            	if (grid[x][y] != null) {
-	            	grid[x][y].remove(sceneNodes);
-	            	grid[x][y] = null;
-            	}
-        	}
-        }
-    }
-    
-    
-    /**
-	 * Getter function for the current spriteStore.
-	 * @return current spriteStore
-	 */
-
-	public Object getSpriteStore() {
-		return spriteStore;
-	}
     /**
 	 * Setter function for the current spriteStore.
 	 * @param spriteStore spriteStore to be set
@@ -820,30 +772,11 @@ public class Board implements Serializable {
 	}
 
     /**
-     * Getter function for the state grid.
-     * @return The state grid.
-     */
-    public int[][] getState() {
-        return state;
-    }
-
-    /**
      * Setter method for the state grid.
      * @param state The state grid.
      */
     public void setState(int[][] state) {
         this.state = state;
-    }
-
-    /**
-     * Function to reset the entire grid[][] to null.
-     */
-    public void resetGrid() {
-        for (int x = 0; x < grid.length; x++) {
-            for (int y = 0; y < grid[x].length; y++) {
-            	grid[x][y] = null;
-            }
-        }
     }
     
     /**
@@ -882,7 +815,7 @@ public class Board implements Serializable {
      * Determines if any Jewel on the board is still animating.
      * @return True if any Jewels are falling, otherwise false.
      */
-	public boolean anyJewelsAnimating() {
+	private boolean anyJewelsAnimating() {
 		for (int x = 0; x < gridWidth; x++) {
 			for (int y = 0; y < gridHeight; y++) {
 				if (grid[x][y] != null && grid[x][y].animationActive()) {
