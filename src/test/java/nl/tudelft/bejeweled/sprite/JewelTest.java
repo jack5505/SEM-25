@@ -18,6 +18,7 @@ public class JewelTest {
 	private static final int GRID_J = 5;
 	private static final int GRID_I_NEW = 6;
 	private static final int GRID_J_NEW = 7;
+	private static final int SPRITE_SIZE = 64;
 	private static final double SMALL_V_X = .2;
 	private static final double SMALL_V_Y = .01;
 	private static final double LARGE_V_X = 10000;
@@ -33,7 +34,7 @@ public class JewelTest {
 	 */
 	@Before
 	public void setUp() {
-		jewel = new Jewel(TYPE, GRID_I, GRID_J);
+		jewel = new Jewel(TYPE, GRID_I, GRID_J, GRID_I*SPRITE_SIZE, GRID_J*SPRITE_SIZE );
 	}
 	
 	/**

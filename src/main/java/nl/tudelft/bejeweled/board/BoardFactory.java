@@ -60,9 +60,7 @@ public class BoardFactory implements Serializable {
                 String[] parts = line.split("|");  
                 for (int j = 0; j < gridHeight; j++) {
                     int amr = Integer.parseInt(parts[j]);
-                    Jewel jewel = new Jewel(amr, k, j);
-                    jewel.setxPos(k * spriteWidth);
-                    jewel.setyPos(j * spriteHeight);
+                    Jewel jewel = new Jewel(amr, k, j, k * spriteWidth, j * spriteHeight);
                     grid[k][j] = jewel;
                     // add to actors in play (sprite objects)
                     spriteStore.addSprites(jewel);
@@ -93,10 +91,8 @@ public class BoardFactory implements Serializable {
         // create the boards jewels
         for (int i = 0; i < gridWidth; i++) {
             for (int j = 0; j < gridHeight; j++) {
-               Jewel jewel = new Jewel(rand.nextInt(Board.NUMBER_OF_JEWEL_TYPES) + 1, i, j);
-            //	Jewel jewel = new Jewel((i+j)%7+1, i, j);
-                jewel.setxPos(i * spriteWidth);
-                jewel.setyPos(j * spriteHeight);
+               Jewel jewel = new Jewel(rand.nextInt(Board.NUMBER_OF_JEWEL_TYPES) + 1, i, j,
+            		   i * spriteWidth, j * spriteHeight);
                 grid[i][j] = jewel;
 
                 // add to actors in play (sprite objects)
