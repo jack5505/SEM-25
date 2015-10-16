@@ -108,7 +108,7 @@ public class Board implements Serializable {
      * @param jewel The Jewel to be added to the current selection.
      */
     public void addSelection(Jewel jewel) {
-    	if (!isLocked()) {
+    	if (!isLocked() && !anyJewelsAnimating()) {
     		getSelection().add(jewel);
     		//TODO Cleanup this method with better logic.
     		if (getSelection().size() == 1) {
