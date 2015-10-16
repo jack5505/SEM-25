@@ -24,13 +24,17 @@ public class Jewel extends Sprite {
     /**
      * Constructor for Jewel class.
      * @param type The type of Jewel created.
-     * @param boardX The X position of this Jewel on the board grid (in number of squares).
-     * @param boardY The Y position of this Jewel on the board grid (in number of squares).
+     * @param i The horizontal position of this Jewel on the board grid (in number of squares).
+     * @param j The vertical position of this Jewel on the board grid (in number of squares).
+     * @param x The horizontal position of this Jewel on the board grid (in pixels).
+     * @param y The vertical position of this Jewel on the board grid (in pixels).
      */
-    public Jewel(int type, int boardX, int boardY) {
+    public Jewel(int type, int i, int j, int x, int y) {
         this.type = type;
-        this.boardX = boardX;
-        this.boardY = boardY;
+        this.boardX = i;
+        this.boardY = j;
+        this.xPos = x;
+        this.yPos = y;
 
         String imagePath = "/" + Integer.toString(type) + ".png";
         jewelImage = new Image(Jewel.class.getResourceAsStream(imagePath));
@@ -177,7 +181,7 @@ public class Jewel extends Sprite {
         });
         ft.play();
     }
-    
+
     /**
      * Converts the position information to a string for logging.
      * 

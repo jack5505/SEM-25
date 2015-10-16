@@ -178,47 +178,6 @@ public class Board implements Serializable {
         }
         return false;
     }
-
-    
-    /**
-     * Performs a horizontal swap of two Jewels.
-     * @param j1 First jewel to swap
-     * @param j2 Second jewel to swap
-     */
-    private void horizontalSwap(Jewel j1, Jewel j2) {
-    	int tmp;
-    	double previousJ1, previousJ2;
-    	tmp = j1.getBoardX();
-        j1.setBoardX(j2.getBoardX());
-        j2.setBoardX(tmp);
-
-        previousJ1 = j1.getxPos();
-        j1.setxPos(j2.getxPos());
-        j1.getNode().setTranslateX(previousJ1 - j1.getxPos());
-        previousJ2 = j2.getxPos();
-        j2.setxPos(previousJ1);
-        j2.getNode().setTranslateX(previousJ2 - j2.getxPos());
-    }
-    
-    /**
-     * Performs a vertical Swap of two Jewels.
-     * @param j1 First jewel to swap
-     * @param j2 Second jewel to swap
-     */
-    private void verticalSwap(Jewel j1, Jewel j2) {
-    	int tmp;
-    	double previousJ1, previousJ2;
-    	tmp = j1.getBoardY();
-        j1.setBoardY(j2.getBoardY());
-        j2.setBoardY(tmp);
-
-        previousJ1 = j1.getyPos();
-        j1.setyPos(j2.getyPos());
-        j1.getNode().setTranslateY(previousJ1 - j1.getyPos());
-        previousJ2 = j2.getyPos();
-        j2.setyPos(previousJ1);
-        j2.getNode().setTranslateY(previousJ2 - j2.getyPos());
-    }
     
     /**
      * Swaps two Jewel's with one another.
@@ -226,29 +185,24 @@ public class Board implements Serializable {
      * @param j1 First Jewel to be swapped.
      * @param j2 Second Jewel to be swapped.
      */
-    private void swapJewel(Jewel j1, Jewel j2) {
-        // TODO This can probably be done nicer
-        int x1, x2, y1, y2;
-        x1 = j1.getBoardX();
-        y1 = j1.getBoardY();
-        x2 = j2.getBoardX();
-        y2 = j2.getBoardY();
-
-        Jewel tmpJewel;
-        // find out what direction the change is
-        // horizontal swap
-        if (Math.abs(j1.getBoardX() - j2.getBoardX()) == 1) {
-            horizontalSwap(j1, j2);
-        }
-        else if (Math.abs(j1.getBoardY() - j2.getBoardY()) == 1) {
-            // vertical swap
-            verticalSwap(j1, j2);
-
-        }
-
-        tmpJewel = j1;
-        grid[x1][y1] = j2;
-        grid[x2][y2] = tmpJewel;
+    private void swapJewel(Jewel j1, Jewel j2) {     
+        //Swap the jewels in the board
+        grid[j1.getBoardX()][j1.getBoardY()] = j2;
+        grid[j2.getBoardX()][j2.getBoardY()] = j1;
+        
+        //Swap the positions of the sprite images
+        double previousJ1X = j1.getxPos();
+    	double previousJ1Y = j1.getyPos();
+        j1.moveTo(j2.getxPos(), j2.getyPos());
+        j2.moveTo(previousJ1X, previousJ1Y);
+        
+    	//Swap the jewel's variables of its position on the board
+    	int previousJ1I = j1.getBoardX();
+        int previousJ1J = j1.getBoardY();
+        j1.setBoardX(j2.getBoardX());
+        j1.setBoardY(j2.getBoardY());
+        j2.setBoardX(previousJ1I);
+        j2.setBoardY(previousJ1J);
     }
 
     /**
@@ -640,9 +594,8 @@ public class Board implements Serializable {
      */
     protected void addRandomJewel(int i, int j) {
         Random rand = new Random();
-        Jewel jewel = new Jewel(rand.nextInt(NUMBER_OF_JEWEL_TYPES) + 1, i, j);
-        jewel.setxPos(i * spriteWidth);
-        jewel.setyPos(j * spriteHeight);
+        Jewel jewel = new Jewel(rand.nextInt(NUMBER_OF_JEWEL_TYPES) + 1, i, j,
+        		i * spriteWidth, j * spriteHeight);
         grid[i][j] = jewel;
         spriteStore.addSprites(jewel);
         sceneNodes.getChildren().add(0, jewel.getNode());
@@ -704,9 +657,8 @@ public class Board implements Serializable {
      * @param spots The number of spots to move down
      */
     private void moveJewelDown(Jewel jewel, int spots) {
-        	jewel.setyPos(jewel.getyPos() + spots * this.spriteHeight);
-        	jewel.setBoardY(jewel.getBoardY() + spots);
-        	jewel.getNode().setTranslateY(-spots * this.spriteHeight);
+        jewel.setBoardY(jewel.getBoardY() + spots);
+    	jewel.relativeMoveTo(0, spots * this.spriteHeight);
     }
 
     /**
@@ -851,9 +803,7 @@ public class Board implements Serializable {
 		this.sceneNodes = sceneNodes;
 		for (int i = 0; i < gridWidth; i++) {
             for (int j = 0; j < gridHeight; j++) {
-               Jewel jewel = new Jewel(state[i][j], i, j); 
-                jewel.setxPos(i * spriteWidth); 
-                jewel.setyPos(j * spriteHeight); 
+               Jewel jewel = new Jewel(state[i][j], i, j, i * spriteWidth, j * spriteHeight); 
                 grid[i][j] = null;
                 grid[i][j] = jewel;
                 spriteStore.addSprites(jewel);
