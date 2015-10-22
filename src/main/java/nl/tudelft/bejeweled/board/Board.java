@@ -15,6 +15,7 @@ import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import nl.tudelft.bejeweled.game.BejeweledGame;
 import nl.tudelft.bejeweled.logger.Logger;
+import nl.tudelft.bejeweled.sprite.BasicJewel;
 import nl.tudelft.bejeweled.sprite.Jewel;
 import nl.tudelft.bejeweled.sprite.SelectionCursor;
 import nl.tudelft.bejeweled.sprite.SpriteState;
@@ -112,8 +113,8 @@ public class Board implements Serializable {
     		getSelection().add(jewel);
     		//TODO Cleanup this method with better logic.
     		if (getSelection().size() == 1) {
-    			selectionCursor = new SelectionCursor(getSelection().get(0).getxPos(), 
-    					getSelection().get(0).getyPos());
+    			selectionCursor = new SelectionCursor(getSelection().get(0).getSprite().getxPos(), 
+    					getSelection().get(0).getSprite().getyPos());
     			spriteStore.addSprites(getSelectionCursor());
     			sceneNodes.getChildren().add(0, getSelectionCursor().getNode());
     		}
@@ -155,7 +156,7 @@ public class Board implements Serializable {
     private void tryToReverse() {
     	assert (reverse1 != null);
     	assert (reverse2 != null);
- 		if (!reverse1.animationActive() && !reverse2.animationActive()) {
+ 		if (!reverse1.getSprite().animationActive() && !reverse2.getSprite().animationActive()) {
  			swapJewel(reverse1, reverse2);
  			toReverseMove = false;
  			reverse1 = null;
@@ -190,11 +191,12 @@ public class Board implements Serializable {
         grid[j1.getBoardX()][j1.getBoardY()] = j2;
         grid[j2.getBoardX()][j2.getBoardY()] = j1;
         
+        //TODO create a moveTo function for Jewel that in turn moves it sprite
         //Swap the positions of the sprite images
-        double previousJ1X = j1.getxPos();
-    	double previousJ1Y = j1.getyPos();
-        j1.moveTo(j2.getxPos(), j2.getyPos());
-        j2.moveTo(previousJ1X, previousJ1Y);
+        double previousJ1X = j1.getSprite().getxPos();
+    	double previousJ1Y = j1.getSprite().getyPos();
+        j1.getSprite().moveTo(j2.getSprite().getxPos(), j2.getSprite().getyPos());
+        j2.getSprite().moveTo(previousJ1X, previousJ1Y);
         
     	//Swap the jewel's variables of its position on the board
     	int previousJ1I = j1.getBoardX();
@@ -221,7 +223,7 @@ public class Board implements Serializable {
             type = 0;
             for (int i = 0; i < grid[0].length; i++) {
                 if (grid[col][i].getType() == type && type != 0
-                        && grid[col][i].getState() != SpriteState.TO_BE_REMOVED) {
+                        && grid[col][i].getSprite().getState() != SpriteState.TO_BE_REMOVED) {
                     matches++;
                     current.push(grid[col][i]);
                 } //subtract 1 because arrays start at 0
@@ -254,7 +256,7 @@ public class Board implements Serializable {
             type = 0;
             for (int i = 0; i < grid.length; i++) {
                 if (grid[i][row].getType() == type && type != 0
-                        && grid[i][row].getState() != SpriteState.TO_BE_REMOVED) {
+                        && grid[i][row].getSprite().getState() != SpriteState.TO_BE_REMOVED) {
                     matches++;
                     current.push(grid[i][row]);
                 }
@@ -296,7 +298,7 @@ public class Board implements Serializable {
             // remove the JavaFX nodes from the scene group and animate an implosion
             jewel.implode(sceneNodes);
             // remove the event filter
-            jewel.getNode().setOnMouseClicked(null);
+            jewel.getSprite().getNode().setOnMouseClicked(null);
             updateScore();
             // TODO Make sure the Jewels are also removed from the spriteStore.
             // grid[jewel.getBoardX()][jewel.getBoardY()] = null;
@@ -594,13 +596,13 @@ public class Board implements Serializable {
      */
     protected void addRandomJewel(int i, int j) {
         Random rand = new Random();
-        Jewel jewel = new Jewel(rand.nextInt(NUMBER_OF_JEWEL_TYPES) + 1, i, j,
+        Jewel jewel = new BasicJewel(rand.nextInt(NUMBER_OF_JEWEL_TYPES) + 1, i, j,
         		i * spriteWidth, j * spriteHeight);
         grid[i][j] = jewel;
-        spriteStore.addSprites(jewel);
-        sceneNodes.getChildren().add(0, jewel.getNode());
+        spriteStore.addSprites(jewel.getSprite());
+        sceneNodes.getChildren().add(0, jewel.getSprite().getNode());
         setSpriteStore(spriteStore);
-        grid[i][j].getNode().addEventFilter(MouseEvent.MOUSE_CLICKED,
+        grid[i][j].getSprite().getNode().addEventFilter(MouseEvent.MOUSE_CLICKED,
             new EventHandler<MouseEvent>() {
                 public void handle(MouseEvent event) {
                     addSelection(jewel);
@@ -621,9 +623,9 @@ public class Board implements Serializable {
     protected void addRandomJewel(int i, int j, int translateX, int translateY) {
     	  addRandomJewel(i, j);
           if (translateX != 0 || translateY != 0) {
-        	  grid[i][j].setState(SpriteState.ANIMATION_ACTIVE);
-        	  grid[i][j].getNode().setTranslateX(translateX);
-        	  grid[i][j].getNode().setTranslateY(translateY);
+        	  grid[i][j].getSprite().setState(SpriteState.ANIMATION_ACTIVE);
+        	  grid[i][j].getSprite().getNode().setTranslateX(translateX);
+        	  grid[i][j].getSprite().getNode().setTranslateY(translateY);
           }
     }
 
@@ -636,7 +638,7 @@ public class Board implements Serializable {
     	for (int i = 0; i < gridWidth; i++) {	
     		int emptySpots = 0;
     		for (int j = gridHeight - 1; j >= 0; j--) {
-    			if (grid[i][j] == null || grid[i][j].getState() == SpriteState.TO_BE_REMOVED) {
+    			if (grid[i][j] == null || grid[i][j].getSprite().getState() == SpriteState.TO_BE_REMOVED) {
     				emptySpots++;
     			} else {
     				if (emptySpots > 0) {
@@ -658,7 +660,7 @@ public class Board implements Serializable {
      */
     private void moveJewelDown(Jewel jewel, int spots) {
         jewel.setBoardY(jewel.getBoardY() + spots);
-    	jewel.relativeMoveTo(0, spots * this.spriteHeight);
+    	jewel.getSprite().relativeMoveTo(0, spots * this.spriteHeight);
     }
 
     /**
@@ -770,7 +772,7 @@ public class Board implements Serializable {
 	private boolean anyJewelsAnimating() {
 		for (int x = 0; x < gridWidth; x++) {
 			for (int y = 0; y < gridHeight; y++) {
-				if (grid[x][y] != null && grid[x][y].animationActive()) {
+				if (grid[x][y] != null && grid[x][y].getSprite().animationActive()) {
 					return true;
 				}
 			}
@@ -803,13 +805,13 @@ public class Board implements Serializable {
 		this.sceneNodes = sceneNodes;
 		for (int i = 0; i < gridWidth; i++) {
             for (int j = 0; j < gridHeight; j++) {
-               Jewel jewel = new Jewel(state[i][j], i, j, i * spriteWidth, j * spriteHeight); 
+               Jewel jewel = new BasicJewel(state[i][j], i, j, i * spriteWidth, j * spriteHeight); 
                 grid[i][j] = null;
                 grid[i][j] = jewel;
-                spriteStore.addSprites(jewel);
-                sceneNodes.getChildren().add(0, jewel.getNode());
+                spriteStore.addSprites(jewel.getSprite());
+                sceneNodes.getChildren().add(0, jewel.getSprite().getNode());
                 setSpriteStore(spriteStore);
-                grid[i][j].getNode().addEventFilter(MouseEvent.MOUSE_CLICKED,
+                grid[i][j].getSprite().getNode().addEventFilter(MouseEvent.MOUSE_CLICKED,
                         new EventHandler<MouseEvent>() {
                             public void handle(MouseEvent event) {
                                 addSelection(jewel);

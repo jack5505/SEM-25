@@ -29,10 +29,10 @@ public class SpriteStoreTest {
      */
     @Test
     public void addSprite() {
-        Jewel sprite = mock(Jewel.class);
+        Jewel jewel = mock(Jewel.class);
 
-        spriteStore.addSprites(sprite);
-        assertTrue(spriteStore.getAllSprites().contains(sprite));
+        spriteStore.addSprites(jewel.getSprite());
+        assertTrue(spriteStore.getAllSprites().contains(jewel.getSprite()));
     }
 
     /**
@@ -40,16 +40,17 @@ public class SpriteStoreTest {
      */
     @Test
     public void addMultipleSprites() {
-        Jewel sprite1 = mock(Jewel.class);
-        Jewel sprite2 = mock(Jewel.class);
-        Jewel sprite3 = mock(Jewel.class);
+        Jewel jewel1 = mock(Jewel.class);
+        Jewel jewel2 = mock(Jewel.class);
+        Jewel jewel3 = mock(Jewel.class);
 
-        spriteStore.addSprites(sprite1);
-        spriteStore.addSprites(sprite2);
-        spriteStore.addSprites(sprite3);
-        assertTrue(spriteStore.getAllSprites().contains(sprite1));
-        assertTrue(spriteStore.getAllSprites().contains(sprite2));
-        assertTrue(spriteStore.getAllSprites().contains(sprite3));
+        spriteStore.addSprites(jewel1.getSprite());
+        spriteStore.addSprites(jewel2.getSprite());
+        spriteStore.addSprites(jewel3.getSprite());
+        
+        assertTrue(spriteStore.getAllSprites().contains(jewel1.getSprite()));
+        assertTrue(spriteStore.getAllSprites().contains(jewel2.getSprite()));
+        assertTrue(spriteStore.getAllSprites().contains(jewel3.getSprite()));
     }
 
     /**
@@ -57,13 +58,13 @@ public class SpriteStoreTest {
      */
     @Test
     public void removeSprite() {
-        Jewel sprite = mock(Jewel.class);
+        Jewel jewel = mock(Jewel.class);
 
-        spriteStore.addSprites(sprite);
-        assertTrue(spriteStore.getAllSprites().contains(sprite));
+        spriteStore.addSprites(jewel.getSprite());
+        assertTrue(spriteStore.getAllSprites().contains(jewel.getSprite()));
 
-        spriteStore.removeSprite(sprite);
-        assertFalse(spriteStore.getAllSprites().contains(sprite));
+        spriteStore.removeSprite(jewel.getSprite());
+        assertFalse(spriteStore.getAllSprites().contains(jewel.getSprite()));
     }
 
     /**
@@ -71,17 +72,17 @@ public class SpriteStoreTest {
      */
     @Test
     public void removeAll() {
-        Jewel sprite1 = mock(Jewel.class);
-        Jewel sprite2 = mock(Jewel.class);
-        Jewel sprite3 = mock(Jewel.class);
-
-        spriteStore.addSprites(sprite1);
-        spriteStore.addSprites(sprite2);
-        spriteStore.addSprites(sprite3);
+    	Jewel jewel1 = mock(Jewel.class);
+        Jewel jewel2 = mock(Jewel.class);
+        Jewel jewel3 = mock(Jewel.class);
+        
+        spriteStore.addSprites(jewel1.getSprite());
+        spriteStore.addSprites(jewel2.getSprite());
+        spriteStore.addSprites(jewel3.getSprite());
         
         spriteStore.removeAllSprites();
-        assertFalse(spriteStore.getAllSprites().contains(sprite1));
-        assertFalse(spriteStore.getAllSprites().contains(sprite2));
-        assertFalse(spriteStore.getAllSprites().contains(sprite3));
+        assertFalse(spriteStore.getAllSprites().contains(jewel1.getSprite()));
+        assertFalse(spriteStore.getAllSprites().contains(jewel2.getSprite()));
+        assertFalse(spriteStore.getAllSprites().contains(jewel3.getSprite()));
     }
 }
