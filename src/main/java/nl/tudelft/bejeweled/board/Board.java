@@ -323,13 +323,9 @@ public class Board implements Serializable {
      * @return true if no moves possible
      */
     public boolean outOfMoves() {
-    	for (int x = 0; x < grid.length; x++) {
-			for (int y = 0; y < grid[0].length; y++) {
-                if (!getValidMovePair(new BruteForceStrategy(grid, x, y)).isEmpty()) {
-                    return false;
-                }
-			}
-		}
+        if (!getValidMovePair(new BruteForceStrategy(grid)).isEmpty()) {
+            return false;
+        }
     	for (BoardObserver observer : observers) {
 			observer.boardOutOfMoves();
     	}
@@ -499,17 +495,11 @@ public class Board implements Serializable {
 	 */
 	public void showHint() {
 		
-		List<Jewel> swap;
+		List<Jewel> swap = getValidMovePair(new BruteForceStrategy(grid));
 		
-		for (int x = 0; x < grid.length; x++) {
-			for (int y = 0; y < grid[0].length; y++) {
-				swap = getValidMovePair(new BruteForceStrategy(grid, x, y));
-				if (!swap.isEmpty()) {
-					addSelection(swap.get(1));
-					return;
-				}
-			}
-		}
+		if (!swap.isEmpty()) {
+            addSelection(swap.get(1));
+        }
 	}
 
     /**

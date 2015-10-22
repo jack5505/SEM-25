@@ -14,23 +14,37 @@ import java.util.List;
 public class BruteForceStrategy implements BoardMoveStrategy {
 
     private Jewel[][] grid;
-    private int x;
-    private int y;
 
     /**
      * Constructor for BruteForceStrategy.
      * @param grid The grid of Jewels to search.
-     * @param x x Position of starting Jewel.
-     * @param y y Position of starting Jewel.
      */
-    public BruteForceStrategy(Jewel[][] grid, int x, int y) {
+    public BruteForceStrategy(Jewel[][] grid) {
         this.grid = grid;
-        this.x = x;
-        this.y = y;
     }
 
     @Override
     public List<Jewel> getValidMovePair() {
+        List<Jewel> swap = new ArrayList<>();
+        for (int x = 0; x < grid.length; x++) {
+            for (int y = 0; y < grid[0].length; y++) {
+                swap = checkForPair(x, y);
+                if (!swap.isEmpty()) {
+                    return swap;
+                }
+            }
+        }
+
+        return swap;
+    }
+
+    /**
+     * Checks grid for valid move pair.
+     * @param x Starting x position.
+     * @param y Starting y position.
+     * @return Pair of Jewels if move is found, empty list otherwise.
+     */
+    public List<Jewel> checkForPair(int x, int y) {
         int type = grid[x][y].getType();
         List<Jewel> swap;
         if (y < grid[0].length - 1 && type == grid[x][y + 1].getType()) {
