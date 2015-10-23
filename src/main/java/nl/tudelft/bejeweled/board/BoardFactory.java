@@ -2,10 +2,9 @@ package nl.tudelft.bejeweled.board;
 import java.io.Serializable;
 
 import nl.tudelft.bejeweled.game.BejeweledGame;
-import nl.tudelft.bejeweled.sprite.BasicJewel;
-import nl.tudelft.bejeweled.sprite.Jewel;
 import nl.tudelft.bejeweled.sprite.SpriteStore;
-
+import nl.tudelft.jewel.BasicJewel;
+import nl.tudelft.jewel.Jewel;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
@@ -64,7 +63,7 @@ public class BoardFactory implements Serializable {
                     Jewel jewel = new BasicJewel(amr, k, j, k * spriteWidth, j * spriteHeight);
                     grid[k][j] = jewel;
                     // add to actors in play (sprite objects)
-                    spriteStore.addSprites(jewel.getSprite());
+                    spriteStore.addSprite(jewel.getSprite());
                     sceneNodes.getChildren().add(0, jewel.getSprite().getNode()); 
                 } k++;        
             }
@@ -97,7 +96,7 @@ public class BoardFactory implements Serializable {
                 grid[i][j] = jewel;
 
                 // add to actors in play (sprite objects)
-                spriteStore.addSprites(jewel.getSprite());
+                spriteStore.addSprite(jewel.getSprite());
 
                 // add sprites
                 sceneNodes.getChildren().add(0, jewel.getSprite().getNode());

@@ -8,6 +8,8 @@ import static org.mockito.Mockito.mock;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.tudelft.jewel.Jewel;
+
 /**
  * Created by Jeroen on 10-9-2015.
  * Test class for the sprites
@@ -31,7 +33,7 @@ public class SpriteStoreTest {
     public void addSprite() {
         Jewel jewel = mock(Jewel.class);
 
-        spriteStore.addSprites(jewel.getSprite());
+        spriteStore.addSprite(jewel.getSprite());
         assertTrue(spriteStore.getAllSprites().contains(jewel.getSprite()));
     }
 
@@ -44,9 +46,9 @@ public class SpriteStoreTest {
         Jewel jewel2 = mock(Jewel.class);
         Jewel jewel3 = mock(Jewel.class);
 
-        spriteStore.addSprites(jewel1.getSprite());
-        spriteStore.addSprites(jewel2.getSprite());
-        spriteStore.addSprites(jewel3.getSprite());
+        spriteStore.addSprite(jewel1.getSprite());
+        spriteStore.addSprite(jewel2.getSprite());
+        spriteStore.addSprite(jewel3.getSprite());
         
         assertTrue(spriteStore.getAllSprites().contains(jewel1.getSprite()));
         assertTrue(spriteStore.getAllSprites().contains(jewel2.getSprite()));
@@ -60,7 +62,7 @@ public class SpriteStoreTest {
     public void removeSprite() {
         Jewel jewel = mock(Jewel.class);
 
-        spriteStore.addSprites(jewel.getSprite());
+        spriteStore.addSprite(jewel.getSprite());
         assertTrue(spriteStore.getAllSprites().contains(jewel.getSprite()));
 
         spriteStore.removeSprite(jewel.getSprite());
@@ -76,9 +78,9 @@ public class SpriteStoreTest {
         Jewel jewel2 = mock(Jewel.class);
         Jewel jewel3 = mock(Jewel.class);
         
-        spriteStore.addSprites(jewel1.getSprite());
-        spriteStore.addSprites(jewel2.getSprite());
-        spriteStore.addSprites(jewel3.getSprite());
+        spriteStore.addSprite(jewel1.getSprite());
+        spriteStore.addSprite(jewel2.getSprite());
+        spriteStore.addSprite(jewel3.getSprite());
         
         spriteStore.removeAllSprites();
         assertFalse(spriteStore.getAllSprites().contains(jewel1.getSprite()));

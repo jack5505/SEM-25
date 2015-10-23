@@ -3,6 +3,9 @@ package nl.tudelft.bejeweled.sprite;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.tudelft.jewel.BasicJewel;
+import nl.tudelft.jewel.Jewel;
+
 import static org.junit.Assert.assertEquals;
 
 /**

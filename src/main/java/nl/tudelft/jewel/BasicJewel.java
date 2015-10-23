@@ -1,5 +1,8 @@
-package nl.tudelft.bejeweled.sprite;
+package nl.tudelft.jewel;
 
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.animation.FadeTransition;
 import javafx.scene.Group;
@@ -7,6 +10,8 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import nl.tudelft.bejeweled.sprite.JewelSprite;
+import nl.tudelft.bejeweled.sprite.Sprite;
 
 /**
  * Created by Jeroen on 5-9-2015.
@@ -119,6 +124,26 @@ public class BasicJewel implements Jewel {
      */
 	public JewelSprite getSprite() {
 		return sprite;
+	}
+
+	@Override
+	public List<Node> getNodes() {
+		List<Node> nodes = new ArrayList<Node>();
+		nodes.add(getSprite().getNode());
+		return nodes;
+	}
+
+	@Override
+	public void relativeMoveTo(int i, int j) {
+		sprite.relativeMoveTo(i, j);
+		
+	}
+
+	@Override
+	public List<Sprite> getSprites() {
+		List<Sprite> sprites = new ArrayList<Sprite>();
+		sprites.add(getSprite());
+		return sprites;
 	}
 	}
 

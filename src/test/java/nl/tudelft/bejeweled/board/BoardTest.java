@@ -10,9 +10,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javafx.collections.ObservableList;
-import nl.tudelft.bejeweled.sprite.BasicJewel;
-import nl.tudelft.bejeweled.sprite.Jewel;
 import nl.tudelft.bejeweled.sprite.SpriteStore;
+import nl.tudelft.jewel.BasicJewel;
+import nl.tudelft.jewel.Jewel;
 
 /**
  * Various tests for the Board class.

@@ -1,6 +1,11 @@
-package nl.tudelft.bejeweled.sprite;
+package nl.tudelft.jewel;
+
+import java.util.List;
 
 import javafx.scene.Group;
+import javafx.scene.Node;
+import nl.tudelft.bejeweled.sprite.JewelSprite;
+import nl.tudelft.bejeweled.sprite.Sprite;
 
 /**
  * Created by Pim on 23-10-2015.
@@ -71,4 +76,10 @@ public interface Jewel {
      * @return String describing the position of the Jewel on the board
      */
     String toString();
+    
+    List<Node> getNodes();
+
+	void relativeMoveTo(int i, int j);
+
+	List<Sprite> getSprites();
 }
