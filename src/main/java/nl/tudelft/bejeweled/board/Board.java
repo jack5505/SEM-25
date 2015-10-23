@@ -41,7 +41,6 @@ public class Board implements Serializable {
     private List<Jewel> selection = new ArrayList<>();
     
     private transient Jewel[][] grid;
-    private transient List<Jewel> explosives;
     private List<Integer> explosivesSave;
     private transient List<BoardObserver> observers;
 
@@ -72,7 +71,6 @@ public class Board implements Serializable {
         this.sceneNodes = sceneNodes;
         
         this.observers = new ArrayList<>();
-        this.explosives = new ArrayList<>();
     }
 
     /**
@@ -318,18 +316,14 @@ public class Board implements Serializable {
         comboList.clear();
         comboList.addAll(comboSet);
         int count = comboList.size();
-
-        System.out.println("" + explosives.size());
         
         List<Jewel> additionalJewels = new ArrayList();
         // check if any of the jewels is a 
         for (Iterator<Jewel> jewelIterator = comboList.iterator(); jewelIterator.hasNext();) {
             Jewel jewel = jewelIterator.next();
             
-            if (explosives.contains(jewel)) {
+            if (jewel.isExplosive())
             	additionalJewels.addAll(explosiveSurrounding(jewel, comboList));
-            	explosives.remove(jewel);
-            }
 
         }
         
@@ -455,7 +449,6 @@ public class Board implements Serializable {
         Jewel jewel = new ExplosivePowerUp(new BasicJewel(type, i, j,
         		i * spriteWidth, j * spriteHeight));
         grid[i][j] = jewel;
-        explosives.add(jewel);
         spriteStore.addSprites(jewel.getSprites());
         sceneNodes.getChildren().addAll(0, jewel.getNodes());
         setSpriteStore(spriteStore);
@@ -710,16 +703,19 @@ public class Board implements Serializable {
 	}
 	
 	public void saveExplosives() {
-		explosivesSave = new ArrayList();
-		for (Jewel jewel : explosives) {
-			explosivesSave.add(jewel.getType());
-			explosivesSave.add(jewel.getBoardX());
-			explosivesSave.add(jewel.getBoardY());
+		explosivesSave = new ArrayList<Integer>();
+		for (Jewel[] column : grid) {
+			for (Jewel jewel : column) {
+				if (jewel.isExplosive()) {
+					explosivesSave.add(jewel.getType());
+					explosivesSave.add(jewel.getBoardX());
+					explosivesSave.add(jewel.getBoardY());
+				}
+			}
 		}
 	}
 	
 	public void restoreExplosives() {
-		explosives = new ArrayList();
 		for (int i = 0; i < explosivesSave.size(); i+=3) {
 			int type = explosivesSave.get(i);
 			int x = explosivesSave.get(i+1);

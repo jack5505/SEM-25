@@ -159,5 +159,10 @@ public class BasicJewel implements Jewel {
 		return false;
 	}
 	
+	@Override
+	public boolean isExplosive() {
+		return false;
+	}
+	
 	}
 

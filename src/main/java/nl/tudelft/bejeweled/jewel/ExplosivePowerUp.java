@@ -50,4 +50,9 @@ public class ExplosivePowerUp extends JewelPowerUp {
 		super.explode(sceneGroup);
 		powerUpSprite.explode(sceneGroup);
 	}
+	
+	@Override 
+	public boolean isExplosive() {
+		return true;
+	}
 }

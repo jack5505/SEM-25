@@ -90,4 +90,6 @@ public interface Jewel {
 	List<JewelSprite> getSprites();
 	
 	boolean isHyper();
+	
+	boolean isExplosive();
 }

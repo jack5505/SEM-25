@@ -93,5 +93,10 @@ public abstract class JewelPowerUp implements Jewel {
 	public boolean isHyper(){
 		return baseJewel.isHyper();
 	}
+	
+	@Override
+	public boolean isExplosive() {
+		return baseJewel.isExplosive();
+	}
 
 }
