@@ -17,6 +17,7 @@ public class JewelSprite extends Sprite {
 		public static final double MAX_SPEED_X = 4;
 		public static final double MAX_SPEED_Y = 4;
 		public static final int FADE_OUT_DURATION = 300;
+		public static final int EXPLODE_DURATION = 600;
 		public static final int FADE_IN_DURATION = 300;
 		
 	    private final int type;
@@ -116,6 +117,40 @@ public class JewelSprite extends Sprite {
 	        ft.play();
 	    }
 
+	    /**
+	     * Animate an explosion. Once done remove from the game world
+	     * @param sceneGroup Game scene group to remove the Jewel from.
+	     */
+	    public void explode(Group sceneGroup) {
+	        setState(SpriteState.ANIMATION_ACTIVE);
+	        setvX(0);
+	        setvY(0);
+
+	        String imagePath = "/explode_29.png";
+	        jewelImage = new Image(Jewel.class.getResourceAsStream(imagePath));
+	        ImageView jewelImageView = new ImageView();
+	        jewelImageView.setImage(jewelImage);
+	        jewelImageView.setX(-100);
+	        jewelImageView.setY(-100);
+	        jewelImageView.setStyle("-fx-background-color:transparent;");
+	        sceneGroup.getChildren().remove(getNode());
+	        sceneGroup.getChildren().add(jewelImageView);
+	        setNode(jewelImageView);
+	        
+	        FadeTransition ft = new FadeTransition(Duration.millis(EXPLODE_DURATION), getNode());
+	        ft.setFromValue(1.0);
+	        ft.setToValue(0.0);
+	        ft.setCycleCount(1);
+	        ft.setAutoReverse(false);
+	        ft.setOnFinished(event -> {
+	            setState(SpriteState.TO_BE_REMOVED);
+	            if (sceneGroup != null) {
+	                sceneGroup.getChildren().remove(getNode());
+	            }
+	        });
+	        ft.play();
+	    }
+	    
 	    /**
 	     * Simple version of implode, to remove the jewel from the game.
 	     * @param sceneGroup Game scene group to remove the Jewel from.
