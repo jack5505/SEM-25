@@ -17,8 +17,7 @@ public class JewelSprite extends Sprite {
 		public static final double MAX_SPEED_X = 4;
 		public static final double MAX_SPEED_Y = 4;
 		public static final int FADE_OUT_DURATION = 300;
-		public static final int FADE_IN_DURATION = 2000;
-
+		public static final int FADE_IN_DURATION = 300;
 		
 	    private final int type;
 		private Image jewelImage;
@@ -26,8 +25,6 @@ public class JewelSprite extends Sprite {
 	    /**
 	     * Constructor for Jewel class.
 	     * @param type The type of Jewel created.
-	     * @param i The horizontal position of this Jewel on the board grid (in number of squares).
-	     * @param j The vertical position of this Jewel on the board grid (in number of squares).
 	     * @param x The horizontal position of this Jewel on the board grid (in pixels).
 	     * @param y The vertical position of this Jewel on the board grid (in pixels).
 	     */

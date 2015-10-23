@@ -82,4 +82,6 @@ public interface Jewel {
 	void relativeMoveTo(int i, int j);
 
 	List<JewelSprite> getSprites();
+	
+	boolean isHyper();
 }

@@ -20,6 +20,7 @@ import nl.tudelft.bejeweled.sprite.SpriteState;
 import nl.tudelft.bejeweled.sprite.SpriteStore;
 import nl.tudelft.jewel.BasicJewel;
 import nl.tudelft.jewel.ExplosivePowerUp;
+import nl.tudelft.jewel.HyperPowerUp;
 import nl.tudelft.jewel.Jewel;
 
 /**
@@ -33,6 +34,7 @@ public class Board implements Serializable {
 	private int spriteHeight;
 	private static final int MINIMAL_COMBO_LENGTH = 3;
 	private static final int EXPLOSIVE_JEWEL_COMBO_LENGTH = 4;
+	private static final int HYPER_JEWEL_COMBO_LENGTH = 5;
 	public static final int NUMBER_OF_JEWEL_TYPES = 7;
 
     private List<Jewel> selection = new ArrayList<>();
@@ -122,8 +124,13 @@ public class Board implements Serializable {
     		}
     		// 2 gems are selected, see if any combo's are made
     		if (getSelection().size() == 2) {
-
-    			if (moveWithinDomain(getSelection().get(0), getSelection().get(1))) {
+    			
+    			//Check for hypermoves
+    			if (getSelection().get(0).isHyper()) {
+    				hyperMove(getSelection().get(0), getSelection().get(1));
+    			} else if (getSelection().get(1).isHyper()) {
+    				hyperMove(getSelection().get(1), getSelection().get(0));
+    			} else if (moveWithinDomain(getSelection().get(0), getSelection().get(1))) {
     				Logger.logInfo("Swapping jewels " + getSelection().get(0).toString()
     						+ " and " + getSelection().get(1).toString());
     				swapJewel(getSelection().get(0), getSelection().get(1));
@@ -140,6 +147,17 @@ public class Board implements Serializable {
     		}
     	}
     }
+
+	private void hyperMove(Jewel hyperjewel, Jewel jewel2) {
+		hyperjewel.implode(sceneNodes);
+	    for (int x = 0; x < gridWidth; x++) {
+            for (int y = 0; y < gridHeight; y++) {
+            	if (grid[x][y].getType() == jewel2.getType()) {
+	                grid[x][y].implode(sceneNodes);
+            	}
+            }
+        }
+	}
 
 	/**
      * Set up two jewels to be swapped, intended to undo an invalid move.
@@ -298,6 +316,9 @@ public class Board implements Serializable {
         comboList.addAll(comboSet);
         int count = comboList.size();
 
+ 
+        
+        
         for (Iterator<Jewel> jewelIterator = comboList.iterator(); jewelIterator.hasNext();) {
             Jewel jewel = jewelIterator.next();
             // remove the JavaFX nodes from the scene group and animate an implosion
@@ -309,21 +330,20 @@ public class Board implements Serializable {
             // grid[jewel.getBoardX()][jewel.getBoardY()] = null;
         }
         //Check if PowerJewels should be generated.
-        if (selection.size() == 2) { //Player just made a move
-	        if (count == EXPLOSIVE_JEWEL_COMBO_LENGTH) { 
-	        	int movedJewelIndex;
-	        	if (comboList.contains(selection.get(0))) {
-	        		movedJewelIndex = 0;
-	        	} else {
-	        		movedJewelIndex = 1;
-	        	}
-	        	addRandomExplosiveJewel(selection.get(movedJewelIndex).getBoardX(),
-	        							selection.get(movedJewelIndex).getBoardY());
-	        	
+         if (count == EXPLOSIVE_JEWEL_COMBO_LENGTH) { 
+	        	Jewel powerjewel = comboList.get(0);
+	        	addExplosiveJewel(	powerjewel.getType(), 
+	        						powerjewel.getBoardX(), 
+	        						powerjewel.getBoardY()
+	        						);
 	        }
-        	
-        }
-
+         if (count == HYPER_JEWEL_COMBO_LENGTH) { 
+	        	Jewel powerjewel = comboList.get(0);
+	        	addHyperJewel(		powerjewel.getType(), 
+	        						powerjewel.getBoardX(), 
+	        						powerjewel.getBoardY()
+	        						);
+	        }
         return count;
     }
     
@@ -634,13 +654,12 @@ public class Board implements Serializable {
     }
     
     /**
-     * This function adds a jewel of a random type to the grid at the specified position.
+     * This function adds an explosive jewel of the selected type to the grid at the specified position.
      * @param i Grid column
      * @param j Grid row
      */
-    protected void addRandomExplosiveJewel(int i, int j) {
-        Random rand = new Random();
-        Jewel jewel = new ExplosivePowerUp(new BasicJewel(rand.nextInt(NUMBER_OF_JEWEL_TYPES) + 1, i, j,
+    protected void addExplosiveJewel(int type, int i, int j) {
+        Jewel jewel = new ExplosivePowerUp(new BasicJewel(type, i, j,
         		i * spriteWidth, j * spriteHeight));
         grid[i][j] = jewel;
         spriteStore.addSprites(jewel.getSprites());
@@ -655,7 +674,33 @@ public class Board implements Serializable {
             }
         )
         );
-        grid[i][j].getSprites().forEach((sprite)-> sprite.fadeIn(sceneNodes));    }
+        grid[i][j].getSprites().forEach((sprite)-> sprite.fadeIn(sceneNodes)); 
+     }
+    
+    /**
+     * This function adds an explosive jewel of the selected type to the grid at the specified position.
+     * @param i Grid column
+     * @param j Grid row
+     */
+    protected void addHyperJewel(int type, int i, int j) {
+        Jewel jewel = new HyperPowerUp(new BasicJewel(type, i, j,
+        		i * spriteWidth, j * spriteHeight));
+        grid[i][j] = jewel;
+        spriteStore.addSprites(jewel.getSprites());
+        sceneNodes.getChildren().addAll(0, jewel.getNodes());
+        setSpriteStore(spriteStore);
+        grid[i][j].getNodes().forEach((node) -> node.addEventFilter(MouseEvent.MOUSE_CLICKED,
+            new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    addSelection(jewel);
+                    event.consume();
+                }
+            }
+        )
+        );
+        grid[i][j].getSprites().forEach((sprite)-> sprite.fadeIn(sceneNodes));  
+      }
+    
     
     /**
      * This function adds a animating jewel of a random type to the grid at the specified position.

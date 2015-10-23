@@ -83,5 +83,10 @@ public abstract class JewelPowerUp implements Jewel {
 	public List<JewelSprite> getSprites() {
 		return baseJewel.getSprites();
 	}
+	
+	@Override
+	public boolean isHyper(){
+		return baseJewel.isHyper();
+	}
 
 }

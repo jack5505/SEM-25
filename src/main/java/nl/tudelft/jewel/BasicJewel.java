@@ -145,5 +145,11 @@ public class BasicJewel implements Jewel {
 		sprites.add(getSprite());
 		return sprites;
 	}
+	
+	@Override
+	public boolean isHyper(){
+		return false;
+	}
+	
 	}
 
