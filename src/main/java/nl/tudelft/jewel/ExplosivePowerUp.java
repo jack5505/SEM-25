@@ -32,8 +32,8 @@ public class ExplosivePowerUp extends JewelPowerUp {
 	}
 	
 	@Override
-	public List<Sprite> getSprites() {
-		List<Sprite> sprites = new ArrayList<Sprite>();
+	public List<JewelSprite> getSprites() {
+		List<JewelSprite> sprites = new ArrayList<JewelSprite>();
 		sprites.addAll(super.getSprites());
 		sprites.add(powerUpSprite);
 		return sprites;

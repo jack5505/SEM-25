@@ -106,7 +106,7 @@ public class BasicJewel implements Jewel {
    * @param sceneGroup the sceneGroup which displays the jewel fading in.
    */
     public void fadeIn(Group sceneGroup) {
-     sprite.fadeIn(sceneGroup);
+    	getSprites().forEach((sprite) -> sprite.fadeIn(sceneGroup));
     }
 
     /**
@@ -140,8 +140,8 @@ public class BasicJewel implements Jewel {
 	}
 
 	@Override
-	public List<Sprite> getSprites() {
-		List<Sprite> sprites = new ArrayList<Sprite>();
+	public List<JewelSprite> getSprites() {
+		List<JewelSprite> sprites = new ArrayList<JewelSprite>();
 		sprites.add(getSprite());
 		return sprites;
 	}

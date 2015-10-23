@@ -80,7 +80,7 @@ public abstract class JewelPowerUp implements Jewel {
 	}
 	
 	@Override
-	public List<Sprite> getSprites() {
+	public List<JewelSprite> getSprites() {
 		return baseJewel.getSprites();
 	}
 

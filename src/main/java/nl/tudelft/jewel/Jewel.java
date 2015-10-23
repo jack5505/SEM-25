@@ -81,5 +81,5 @@ public interface Jewel {
 
 	void relativeMoveTo(int i, int j);
 
-	List<Sprite> getSprites();
+	List<JewelSprite> getSprites();
 }
