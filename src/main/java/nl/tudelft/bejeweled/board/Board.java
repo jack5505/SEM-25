@@ -13,14 +13,14 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import nl.tudelft.bejeweled.game.BejeweledGame;
+import nl.tudelft.bejeweled.jewel.BasicJewel;
+import nl.tudelft.bejeweled.jewel.ExplosivePowerUp;
+import nl.tudelft.bejeweled.jewel.HyperPowerUp;
+import nl.tudelft.bejeweled.jewel.Jewel;
 import nl.tudelft.bejeweled.logger.Logger;
 import nl.tudelft.bejeweled.sprite.SelectionCursor;
 import nl.tudelft.bejeweled.sprite.SpriteState;
 import nl.tudelft.bejeweled.sprite.SpriteStore;
-import nl.tudelft.jewel.BasicJewel;
-import nl.tudelft.jewel.ExplosivePowerUp;
-import nl.tudelft.jewel.HyperPowerUp;
-import nl.tudelft.jewel.Jewel;
 
 /**
  * Created by Jeroen on 4-9-2015.

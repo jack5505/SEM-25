@@ -2,9 +2,9 @@ package nl.tudelft.bejeweled.board;
 import java.io.Serializable;
 
 import nl.tudelft.bejeweled.game.BejeweledGame;
+import nl.tudelft.bejeweled.jewel.BasicJewel;
+import nl.tudelft.bejeweled.jewel.Jewel;
 import nl.tudelft.bejeweled.sprite.SpriteStore;
-import nl.tudelft.jewel.BasicJewel;
-import nl.tudelft.jewel.Jewel;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;

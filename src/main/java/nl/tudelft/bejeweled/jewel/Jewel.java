@@ -1,4 +1,4 @@
-package nl.tudelft.jewel;
+package nl.tudelft.bejeweled.jewel;
 
 import java.util.List;
 

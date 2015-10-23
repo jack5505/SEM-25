@@ -8,7 +8,7 @@ import static org.mockito.Mockito.mock;
 import org.junit.Before;
 import org.junit.Test;
 
-import nl.tudelft.jewel.Jewel;
+import nl.tudelft.bejeweled.jewel.Jewel;
 
 /**
  * Created by Jeroen on 10-9-2015.

@@ -1,4 +1,4 @@
-package nl.tudelft.jewel;
+package nl.tudelft.bejeweled.jewel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,15 +6,16 @@ import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import nl.tudelft.bejeweled.sprite.ExplosiveSprite;
+import nl.tudelft.bejeweled.sprite.HyperSprite;
 import nl.tudelft.bejeweled.sprite.JewelSprite;
 import nl.tudelft.bejeweled.sprite.Sprite;
 
-public class ExplosivePowerUp extends JewelPowerUp {
+public class HyperPowerUp extends JewelPowerUp {
 
 	private JewelSprite powerUpSprite;
-	public ExplosivePowerUp(Jewel baseJewel) {
+	public HyperPowerUp(Jewel baseJewel) {
 		super(baseJewel);
-		this.powerUpSprite = new ExplosiveSprite(super.getSprite().getxPos(), super.getSprite().getyPos()); 
+		this.powerUpSprite = new HyperSprite(super.getSprite().getxPos(), super.getSprite().getyPos()); 
 	}
 	
 	@Override
@@ -50,5 +51,10 @@ public class ExplosivePowerUp extends JewelPowerUp {
 		super.implode(sceneGroup);
 		powerUpSprite.implode(sceneGroup);
 		
+	}
+	
+	@Override
+	public boolean isHyper(){
+		return true;
 	}
 }

@@ -6,7 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
-import nl.tudelft.jewel.Jewel;
+import nl.tudelft.bejeweled.jewel.Jewel;
 
 /**
  * Created by Jeroen on 5-9-2015.
