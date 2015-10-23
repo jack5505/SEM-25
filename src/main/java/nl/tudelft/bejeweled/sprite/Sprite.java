@@ -14,10 +14,10 @@ public abstract class Sprite {
     private Node node;
 
     /** X  screen position. */
-    protected double xPos;
+    protected int xPos;
 
     /** Y screen position. */
-    protected double yPos;
+    protected int yPos;
 
     /** velocity vector x direction. */
     private double vX = 0;
@@ -53,7 +53,7 @@ public abstract class Sprite {
      * Getter method for xPos.
      * @return the current x position in pixels
      */
-	public double getxPos() {
+	public int getxPos() {
 		return xPos;
 	}
 
@@ -61,7 +61,7 @@ public abstract class Sprite {
      * Setter method for xPos.
      * @param xPos x position in pixels to be set
      */
-	protected void setxPos(double xPos) {
+	protected void setxPos(int xPos) {
 		this.xPos = xPos;
 	}
 
@@ -69,14 +69,14 @@ public abstract class Sprite {
      * Getter method for yPos.
      * @return the current y position in pixels
      */
-	public double getyPos() {
+	public int getyPos() {
 		return yPos;
 	}
     /**
      * Setter method for yPos.
      * @param yPos y position in pixels to be set
      */
-	protected void setyPos(double yPos) {
+	protected void setyPos(int yPos) {
 		this.yPos = yPos;
 	}
 
@@ -133,7 +133,7 @@ public abstract class Sprite {
      * @param x the new x position in pixels.
      * @param y the new y position in pixels.
      */
-    public void moveTo(double x, double y) {
+    public void moveTo(int x, int y) {
     	this.getNode().setTranslateX(this.getxPos() - x);
     	this.getNode().setTranslateY(this.getyPos() - y);
     	this.setxPos(x);
@@ -145,7 +145,7 @@ public abstract class Sprite {
      * @param deltaX the change of x position in pixels.
      * @param deltaY the change of y position in pixels.
      */
-      public void relativeMoveTo(double deltaX, double deltaY) {
+      public void relativeMoveTo(int deltaX, int deltaY) {
     	this.getNode().setTranslateX(-deltaX);
     	this.getNode().setTranslateY(-deltaY);
     	this.setxPos(this.getxPos() + deltaX);

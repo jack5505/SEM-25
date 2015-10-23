@@ -1,6 +1,6 @@
 package nl.tudelft.bejeweled.board;
 
-import nl.tudelft.bejeweled.sprite.Jewel;
+import nl.tudelft.bejeweled.jewel.Jewel;
 
 import java.util.List;
 
