@@ -42,6 +42,7 @@ public class Board implements Serializable {
     
     private transient Jewel[][] grid;
     private List<Integer> explosivesSave;
+    private List<Integer> hyperSave;
     private transient List<BoardObserver> observers;
 
     /** The JavaFX group containing all the jewels. */
@@ -347,7 +348,7 @@ public class Board implements Serializable {
 	        						powerjewel.getBoardY()
 	        						);
 	        }
-         if (count == HYPER_JEWEL_COMBO_LENGTH) { 
+         if (count >= HYPER_JEWEL_COMBO_LENGTH) { 
 	        	Jewel powerjewel = comboList.get(0);
 	        	addHyperJewel(		powerjewel.getType(), 
 	        						powerjewel.getBoardX(), 
@@ -702,8 +703,9 @@ public class Board implements Serializable {
 		return locked;
 	}
 	
-	public void saveExplosives() {
+	public void saveExplosivesAndHypers() {
 		explosivesSave = new ArrayList<Integer>();
+		hyperSave = new ArrayList<Integer>();
 		for (Jewel[] column : grid) {
 			for (Jewel jewel : column) {
 				if (jewel.isExplosive()) {
@@ -711,17 +713,29 @@ public class Board implements Serializable {
 					explosivesSave.add(jewel.getBoardX());
 					explosivesSave.add(jewel.getBoardY());
 				}
+				if (jewel.isHyper()) {
+					hyperSave.add(jewel.getType());
+					hyperSave.add(jewel.getBoardX());
+					hyperSave.add(jewel.getBoardY());
+				}
 			}
 		}
 	}
 	
-	public void restoreExplosives() {
+	public void restoreExplosivesAndHypers() {
 		for (int i = 0; i < explosivesSave.size(); i+=3) {
 			int type = explosivesSave.get(i);
 			int x = explosivesSave.get(i+1);
 			int y = explosivesSave.get(i+2);
 			grid[x][y].implode(sceneNodes);
 			addExplosiveJewel(type, x, y);
+		}
+		for (int i = 0; i < hyperSave.size(); i+=3) {
+			int type = hyperSave.get(i);
+			int x = hyperSave.get(i+1);
+			int y = hyperSave.get(i+2);
+			grid[x][y].implode(sceneNodes);
+			addHyperJewel(type, x, y);
 		}
 	}
 	
