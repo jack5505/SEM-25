@@ -60,6 +60,11 @@ public abstract class JewelPowerUp implements Jewel {
 	}
 
 	@Override
+	public void explode(Group sceneGroup) {
+		baseJewel.explode(sceneGroup);
+	}
+	
+	@Override
 	public void remove(Group sceneGroup) {
 		baseJewel.remove(sceneGroup);
 	}

@@ -47,8 +47,7 @@ public class ExplosivePowerUp extends JewelPowerUp {
 	
 	@Override
 	public void implode(Group sceneGroup) {
-		super.implode(sceneGroup);
-		powerUpSprite.implode(sceneGroup);
-		
+		super.explode(sceneGroup);
+		powerUpSprite.explode(sceneGroup);
 	}
 }

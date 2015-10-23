@@ -57,6 +57,12 @@ public interface Jewel {
      * @param sceneGroup Game scene group to remove the Jewel from.
      */
     void implode(Group sceneGroup);
+    
+    /**
+     * Animate an explosion. Once done remove from the game world
+     * @param sceneGroup Game scene group to remove the Jewel from.
+     */
+    void explode(Group sceneGroup);
 
     /**
      * Simple version of implode, to remove the jewel from the game.

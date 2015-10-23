@@ -12,7 +12,7 @@ public class HyperSprite extends JewelSprite{
      * @param y The Y position of this SelectionCursor on the board grid (in number of squares).
      */
 	public HyperSprite(int x, int y) {
-		super(0, x, y);		
+		super(1, x, y);		
         ImageView explosiveImageView = new ImageView();
         Image explosiveImage = new Image(SelectionCursor.class.getResourceAsStream("/hyper.png"));
         explosiveImageView.setImage(explosiveImage);

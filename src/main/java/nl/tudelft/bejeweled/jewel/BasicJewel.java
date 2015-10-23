@@ -94,6 +94,14 @@ public class BasicJewel implements Jewel {
     }
 
     /**
+     * Animate an explosion. Once done remove from the game world
+     * @param sceneGroup Game scene group to remove the Jewel from.
+     */
+    public void explode(Group sceneGroup) {
+        sprite.explode(sceneGroup);
+    }
+    
+    /**
      * Simple version of implode, to remove the jewel from the game.
      * @param sceneGroup Game scene group to remove the Jewel from.
      */

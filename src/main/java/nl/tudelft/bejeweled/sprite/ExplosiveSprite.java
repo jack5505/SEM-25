@@ -12,7 +12,7 @@ public class ExplosiveSprite extends JewelSprite{
      * @param y The Y position of this SelectionCursor on the board grid (in number of squares).
      */
 	public ExplosiveSprite(int x, int y) {
-		super(0, x, y);		
+		super(1, x, y);		
         ImageView explosiveImageView = new ImageView();
         Image explosiveImage = new Image(SelectionCursor.class.getResourceAsStream("/explosive.png"));
         explosiveImageView.setImage(explosiveImage);

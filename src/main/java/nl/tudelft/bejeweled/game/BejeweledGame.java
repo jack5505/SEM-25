@@ -207,6 +207,7 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
 	        try {
 	        	//Before writing, convert the board to a serializable state
 	        	session.getBoard().setState(session.getBoard().convertGrid());
+	        	session.getBoard().saveExplosives();
 	        	
 	            OutputStream file = new FileOutputStream(SAVE_FILE);
 	            OutputStream buffer = new BufferedOutputStream(file);
@@ -237,9 +238,10 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
     	session = readSessionFromFile(SAVE_FILE);
         session.addObserver(this);
        //Restore the grid from its serialized form
-       session.getBoard().makeGrid(getSceneNodes()); 
+       session.getBoard().makeGrid(getSceneNodes());
        session.unlockBoard();
        session.setSceneNodes(getSceneNodes());
+       session.getBoard().restoreExplosives();
        updateLevel();
        updateScore();
 

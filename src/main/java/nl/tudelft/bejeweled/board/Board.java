@@ -2,6 +2,7 @@ package nl.tudelft.bejeweled.board;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -18,6 +19,7 @@ import nl.tudelft.bejeweled.jewel.ExplosivePowerUp;
 import nl.tudelft.bejeweled.jewel.HyperPowerUp;
 import nl.tudelft.bejeweled.jewel.Jewel;
 import nl.tudelft.bejeweled.logger.Logger;
+import nl.tudelft.bejeweled.sprite.ExplosiveSprite;
 import nl.tudelft.bejeweled.sprite.SelectionCursor;
 import nl.tudelft.bejeweled.sprite.SpriteState;
 import nl.tudelft.bejeweled.sprite.SpriteStore;
@@ -39,7 +41,8 @@ public class Board implements Serializable {
     private List<Jewel> selection = new ArrayList<>();
     
     private transient Jewel[][] grid;
-
+    private transient List<Jewel> explosives;
+    private List<Integer> explosivesSave;
     private transient List<BoardObserver> observers;
 
     /** The JavaFX group containing all the jewels. */
@@ -69,6 +72,7 @@ public class Board implements Serializable {
         this.sceneNodes = sceneNodes;
         
         this.observers = new ArrayList<>();
+        this.explosives = new ArrayList<>();
     }
 
     /**
@@ -315,8 +319,21 @@ public class Board implements Serializable {
         comboList.addAll(comboSet);
         int count = comboList.size();
 
- 
+        System.out.println("" + explosives.size());
         
+        List<Jewel> additionalJewels = new ArrayList();
+        // check if any of the jewels is a 
+        for (Iterator<Jewel> jewelIterator = comboList.iterator(); jewelIterator.hasNext();) {
+            Jewel jewel = jewelIterator.next();
+            
+            if (explosives.contains(jewel)) {
+            	additionalJewels.addAll(explosiveSurrounding(jewel, comboList));
+            	explosives.remove(jewel);
+            }
+
+        }
+        
+        comboList.addAll(additionalJewels);
         
         for (Iterator<Jewel> jewelIterator = comboList.iterator(); jewelIterator.hasNext();) {
             Jewel jewel = jewelIterator.next();
@@ -346,6 +363,37 @@ public class Board implements Serializable {
         return count;
     }
 
+    List<Jewel> explosiveSurrounding(Jewel jewel, List<Jewel> comboList) {
+    	List<Jewel> newComboList = new ArrayList();
+    	newComboList.addAll(comboList);
+    	
+    	System.out.println("Hello World");
+    	// Upper left corner of explosion region
+    	int x0 = -1;
+    	int y0 = -1;
+    	
+    	// Lower right corner of the explosion region
+    	int x1 = 1;
+    	int y1 = 1;
+    	
+    	x0 = Math.max(0, x0+jewel.getBoardX());
+    	x1 = Math.min(7, x1+jewel.getBoardX());
+    	
+    	y0 = Math.max(0, y0+jewel.getBoardY());
+    	y1 = Math.min(7, y1+jewel.getBoardY());
+    	    	
+    	for (int i = x0; i <= x1; i++)
+    		for (int j = y0; j <= y1; j++) {
+    			System.out.println(i + ", " + j);
+    			if (!newComboList.contains(grid[i][j])) {
+    				newComboList.add(grid[i][j]);
+    				System.out.println("Added");
+    			}
+    		}
+    				
+    	return newComboList;
+    }
+    
     /**
      * Function that checks if there are any moves possible.
      * 
@@ -407,6 +455,7 @@ public class Board implements Serializable {
         Jewel jewel = new ExplosivePowerUp(new BasicJewel(type, i, j,
         		i * spriteWidth, j * spriteHeight));
         grid[i][j] = jewel;
+        explosives.add(jewel);
         spriteStore.addSprites(jewel.getSprites());
         sceneNodes.getChildren().addAll(0, jewel.getNodes());
         setSpriteStore(spriteStore);
@@ -659,7 +708,27 @@ public class Board implements Serializable {
 	public boolean isLocked() {
 		return locked;
 	}
-
+	
+	public void saveExplosives() {
+		explosivesSave = new ArrayList();
+		for (Jewel jewel : explosives) {
+			explosivesSave.add(jewel.getType());
+			explosivesSave.add(jewel.getBoardX());
+			explosivesSave.add(jewel.getBoardY());
+		}
+	}
+	
+	public void restoreExplosives() {
+		explosives = new ArrayList();
+		for (int i = 0; i < explosivesSave.size(); i+=3) {
+			int type = explosivesSave.get(i);
+			int x = explosivesSave.get(i+1);
+			int y = explosivesSave.get(i+2);
+			grid[x][y].implode(sceneNodes);
+			addExplosiveJewel(type, x, y);
+		}
+	}
+	
 	/**
 	 * Lock or unlock the board for modification.
 	 * @param locked true if the board is to be locked
