@@ -5,7 +5,6 @@ import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import nl.tudelft.bejeweled.sprite.JewelSprite;
-import nl.tudelft.bejeweled.sprite.Sprite;
 
 /**
  * Created by Pim on 23-10-2015.
@@ -18,7 +17,7 @@ public interface Jewel {
     void update();
        
    /**
-    * Getter method for the sprite
+    * Getter method for the sprite.
     * @return The current sprite.
     */
     JewelSprite getSprite();
@@ -83,13 +82,34 @@ public interface Jewel {
      */
     String toString();
     
+    /**
+     * Getter method for the nodes associated with the sprites of this Jewel. 
+     * @return the nodes associated with the Jewel.
+     */
     List<Node> getNodes();
 
+    /**
+     * Move the jewel by a number of grid spots.
+     * @param i Horizontal spots to move.
+     * @param j Vertical spots to move.
+     */
 	void relativeMoveTo(int i, int j);
 
+	/**
+	 * Getter method for the sprites of this Jewel.
+	 * @return the sprites of this Jewel.
+	 */
 	List<JewelSprite> getSprites();
 	
+	/**
+	 * Test whether or not the Jewel is a Hyper Jewel.
+	 * @return true if the jewel is Hyper.
+	 */
 	boolean isHyper();
 	
+	/**
+	 * Test whether or not the Jewel is an Explosive Jewel.
+	 * @return true if the jewel is Explosive.
+	 */
 	boolean isExplosive();
 }

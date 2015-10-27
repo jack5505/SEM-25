@@ -2,7 +2,6 @@ package nl.tudelft.bejeweled.sprite;
 
 import javafx.animation.FadeTransition;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
@@ -19,6 +18,7 @@ public class JewelSprite extends Sprite {
 		public static final int FADE_OUT_DURATION = 300;
 		public static final int EXPLODE_DURATION = 600;
 		public static final int FADE_IN_DURATION = 300;
+		public static final int EXPLOSIVE_OFFSET = -100;
 		
 	    private final int type;
 		private Image jewelImage;
@@ -31,8 +31,8 @@ public class JewelSprite extends Sprite {
 	     */
 	    public JewelSprite(int type, int x, int y) {
 	        this.type = type;
-	        xPos = x;
-	        yPos = y;
+	        setxPos(x);
+	        setyPos(y);
 
 	        String imagePath = "/" + Integer.toString(type) + ".png";
 	        jewelImage = new Image(Jewel.class.getResourceAsStream(imagePath));
@@ -130,8 +130,8 @@ public class JewelSprite extends Sprite {
 	        jewelImage = new Image(Jewel.class.getResourceAsStream(imagePath));
 	        ImageView jewelImageView = new ImageView();
 	        jewelImageView.setImage(jewelImage);
-	        jewelImageView.setX(-100);
-	        jewelImageView.setY(-100);
+	        jewelImageView.setX(EXPLOSIVE_OFFSET);
+	        jewelImageView.setY(EXPLOSIVE_OFFSET);
 	        jewelImageView.setStyle("-fx-background-color:transparent;");
 	        sceneGroup.getChildren().remove(getNode());
 	        sceneGroup.getChildren().add(jewelImageView);

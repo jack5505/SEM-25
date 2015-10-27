@@ -5,7 +5,6 @@ import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import nl.tudelft.bejeweled.sprite.JewelSprite;
-import nl.tudelft.bejeweled.sprite.Sprite;
 
 /**
  * A Decorator class that adds a powerup to a jewel.
@@ -13,9 +12,14 @@ import nl.tudelft.bejeweled.sprite.Sprite;
  *
  */
 public abstract class JewelPowerUp implements Jewel {
-	protected Jewel baseJewel;
+	private Jewel baseJewel;
 	
-	public JewelPowerUp (Jewel baseJewel) {
+	/**
+	 * Constructor for the Power Up.
+	 * Uses the decorator pattern, so should be applied on top of a base Jewel.
+	 * @param baseJewel the jewel the power up is applied to.
+	 */
+	public JewelPowerUp(Jewel baseJewel) {
 		this.baseJewel = baseJewel;
 	}
 
@@ -90,7 +94,7 @@ public abstract class JewelPowerUp implements Jewel {
 	}
 	
 	@Override
-	public boolean isHyper(){
+	public boolean isHyper() {
 		return baseJewel.isHyper();
 	}
 	

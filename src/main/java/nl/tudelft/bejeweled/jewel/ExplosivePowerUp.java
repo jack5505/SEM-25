@@ -7,14 +7,24 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import nl.tudelft.bejeweled.sprite.ExplosiveSprite;
 import nl.tudelft.bejeweled.sprite.JewelSprite;
-import nl.tudelft.bejeweled.sprite.Sprite;
 
+/**
+ * Power Up that adds explosive capabilities to a Jewel.
+ * @author Pim
+ *
+ */
 public class ExplosivePowerUp extends JewelPowerUp {
 
 	private JewelSprite powerUpSprite;
+	/**
+	 * Constructor for the explosive power up. 
+	 * Uses the decorator pattern, so should be applied on top of a base Jewel.
+	 * @param baseJewel the jewel the power up is applied to.
+	 */
 	public ExplosivePowerUp(Jewel baseJewel) {
 		super(baseJewel);
-		this.powerUpSprite = new ExplosiveSprite(super.getSprite().getxPos(), super.getSprite().getyPos()); 
+		this.powerUpSprite = new ExplosiveSprite(super.getSprite().getxPos(),
+												 super.getSprite().getyPos()); 
 	}
 	
 	@Override
