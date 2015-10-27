@@ -51,7 +51,7 @@ public class SessionTest {
 	}
 	/**
 	 * 
-	 * Test if leveling up a lot works.
+	 * Test if leveling up to level 12 works.
 	 */
 	@Test
 	public void testLevelUpAlot() {

@@ -5,17 +5,27 @@ import java.util.List;
 
 import javafx.scene.Group;
 import javafx.scene.Node;
-import nl.tudelft.bejeweled.sprite.ExplosiveSprite;
 import nl.tudelft.bejeweled.sprite.HyperSprite;
 import nl.tudelft.bejeweled.sprite.JewelSprite;
-import nl.tudelft.bejeweled.sprite.Sprite;
 
+/**
+ * Power Up that adds Hyper capabilities to a Jewel.
+ * @author Pim
+ *
+ */
 public class HyperPowerUp extends JewelPowerUp {
 
 	private JewelSprite powerUpSprite;
+	
+	/**
+	 * Constructor for the hyper power up. 
+	 * Uses the decorator pattern, so should be applied on top of a base Jewel.
+	 * @param baseJewel the jewel the power up is applied to.
+	 */
 	public HyperPowerUp(Jewel baseJewel) {
 		super(baseJewel);
-		this.powerUpSprite = new HyperSprite(super.getSprite().getxPos(), super.getSprite().getyPos()); 
+		this.powerUpSprite = new HyperSprite(super.getSprite().getxPos(),
+											 super.getSprite().getyPos()); 
 	}
 	
 	@Override
@@ -54,7 +64,7 @@ public class HyperPowerUp extends JewelPowerUp {
 	}
 	
 	@Override
-	public boolean isHyper(){
+	public boolean isHyper() {
 		return true;
 	}
 }

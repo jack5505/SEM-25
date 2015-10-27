@@ -1,10 +1,13 @@
 package nl.tudelft.bejeweled.sprite;
 
-import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class HyperSprite extends JewelSprite{
+/** Class that encapsulates the sprite for the Hyper Power Up.
+ * @author Pim
+ *
+ */
+public class HyperSprite extends JewelSprite {
 
 	 /**
      * Constructor for ExplosiveSprite class.

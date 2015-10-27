@@ -4,14 +4,9 @@ package nl.tudelft.bejeweled.jewel;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.animation.FadeTransition;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.util.Duration;
 import nl.tudelft.bejeweled.sprite.JewelSprite;
-import nl.tudelft.bejeweled.sprite.Sprite;
 
 /**
  * Created by Jeroen on 5-9-2015.
@@ -155,7 +150,7 @@ public class BasicJewel implements Jewel {
 	}
 	
 	@Override
-	public boolean isHyper(){
+	public boolean isHyper() {
 		return false;
 	}
 	

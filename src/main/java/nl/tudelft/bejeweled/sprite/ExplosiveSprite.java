@@ -1,10 +1,15 @@
 package nl.tudelft.bejeweled.sprite;
 
-import javafx.scene.Group;
+import java.io.InputStream;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class ExplosiveSprite extends JewelSprite{
+/** Class that encapsulates the sprite for the Explosive Power Up.
+ * @author Pim
+ *
+ */
+public class ExplosiveSprite extends JewelSprite {
 
 	 /**
      * Constructor for ExplosiveSprite class.
@@ -14,7 +19,8 @@ public class ExplosiveSprite extends JewelSprite{
 	public ExplosiveSprite(int x, int y) {
 		super(1, x, y);		
         ImageView explosiveImageView = new ImageView();
-        Image explosiveImage = new Image(SelectionCursor.class.getResourceAsStream("/explosive.png"));
+        InputStream input = SelectionCursor.class.getResourceAsStream("/explosive.png");
+        Image explosiveImage = new Image(input);
         explosiveImageView.setImage(explosiveImage);
         explosiveImageView.setStyle("-fx-background-color:transparent;");
 
