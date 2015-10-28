@@ -118,4 +118,10 @@ public interface Jewel {
 	 * @return true if the jewel is Explosive.
 	 */
 	boolean isExplosive();
+	
+	/**
+	 * Animate a jewel disappearing by a hyper combo.
+	 * @param sceneGroup the sceneGroup which displays the jewel disappearing.
+	 */
+	void hyperConsume(Group sceneGroup);
 }

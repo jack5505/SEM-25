@@ -1,6 +1,9 @@
 package nl.tudelft.bejeweled.sprite;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,6 +22,7 @@ public class JewelSprite extends Sprite {
 		public static final int EXPLODE_DURATION = 600;
 		public static final int FADE_IN_DURATION = 300;
 		public static final int EXPLOSIVE_OFFSET = -100;
+		public static final double HYPER_ROTATE = 360f;
 		
 	    private final int type;
 		private Image jewelImage;
@@ -108,12 +112,7 @@ public class JewelSprite extends Sprite {
 	        ft.setToValue(0.0);
 	        ft.setCycleCount(1);
 	        ft.setAutoReverse(false);
-	        ft.setOnFinished(event -> {
-	            setState(SpriteState.TO_BE_REMOVED);
-	            if (sceneGroup != null) {
-	                sceneGroup.getChildren().remove(getNode());
-	            }
-	        });
+	        ft.setOnFinished(event -> remove(sceneGroup));
 	        ft.play();
 	    }
 
@@ -142,12 +141,7 @@ public class JewelSprite extends Sprite {
 	        ft.setToValue(0.0);
 	        ft.setCycleCount(1);
 	        ft.setAutoReverse(false);
-	        ft.setOnFinished(event -> {
-	            setState(SpriteState.TO_BE_REMOVED);
-	            if (sceneGroup != null) {
-	                sceneGroup.getChildren().remove(getNode());
-	            }
-	        });
+	        ft.setOnFinished(event -> remove(sceneGroup));
 	        ft.play();
 	    }
 	    
@@ -181,4 +175,26 @@ public class JewelSprite extends Sprite {
 	        });
 	        ft.play();
 	    }
+
+	/**
+	 * Animate a sprite disappearing by a hyper combo.
+	 * @param sceneGroup the sceneGroup which displays the sprite disappearing.
+	 */
+	public void hyperConsume(Group sceneGroup) {
+		 	setState(SpriteState.ANIMATION_ACTIVE);
+	        setvX(0);
+	        setvY(0);
+	
+	        RotateTransition rt = new RotateTransition(Duration.millis(EXPLODE_DURATION));
+	        rt.setByAngle(HYPER_ROTATE);
+	        rt.setAutoReverse(false);
+	        ScaleTransition st = new ScaleTransition(Duration.millis(EXPLODE_DURATION));
+	        st.setByX(-1);
+	        st.setByY(-1);
+	        st.setAutoReverse(false);
+	    
+	        ParallelTransition pt = new ParallelTransition(getNode(), rt, st);
+	        pt.setOnFinished(event -> remove(sceneGroup));
+	        pt.play();
+	}
 	}

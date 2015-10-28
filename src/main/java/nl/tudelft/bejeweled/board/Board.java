@@ -150,7 +150,7 @@ public class Board implements Serializable {
 	    for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
             	if (grid[x][y].getType() == jewel2.getType()) {
-	                grid[x][y].implode(sceneNodes);
+	                grid[x][y].hyperConsume(sceneNodes);
             	}
             }
         }

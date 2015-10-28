@@ -108,4 +108,8 @@ public abstract class JewelPowerUp implements Jewel {
 		baseJewel.setSprite(sprite);		
 	}
 
+	@Override
+	public void hyperConsume(Group sceneGroup) {
+		baseJewel.hyperConsume(sceneGroup);
+	}
 }
