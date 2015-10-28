@@ -102,5 +102,10 @@ public abstract class JewelPowerUp implements Jewel {
 	public boolean isExplosive() {
 		return baseJewel.isExplosive();
 	}
+	
+	@Override
+	public void setSprite(JewelSprite sprite) {
+		baseJewel.setSprite(sprite);		
+	}
 
 }
