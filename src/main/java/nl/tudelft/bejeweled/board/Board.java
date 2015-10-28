@@ -431,6 +431,25 @@ public class Board implements Serializable {
     }
     
     /**
+     * This function adds a jewel to the grid at the specified position.
+     */
+    private void addJewel(Jewel jewel, int i, int j) {
+    	 grid[i][j] = jewel;
+         spriteStore.addSprites(jewel.getSprites());
+         sceneNodes.getChildren().addAll(0, jewel.getNodes());
+         setSpriteStore(spriteStore);
+         grid[i][j].getNodes().forEach((node) -> node.addEventFilter(MouseEvent.MOUSE_CLICKED,
+             new EventHandler<MouseEvent>() {
+                 public void handle(MouseEvent event) {
+                     addSelection(jewel);
+                     event.consume();
+                 }
+             }
+         )
+         );
+    }
+    
+    /**
      * This function adds a jewel of a random type to the grid at the specified position.
      * @param i Grid column
      * @param j Grid row
@@ -439,19 +458,7 @@ public class Board implements Serializable {
         Random rand = new Random();
         Jewel jewel = new BasicJewel(rand.nextInt(NUMBER_OF_JEWEL_TYPES) + 1, i, j,
         		i * spriteWidth, j * spriteHeight);
-        grid[i][j] = jewel;
-        spriteStore.addSprites(jewel.getSprites());
-        sceneNodes.getChildren().addAll(0, jewel.getNodes());
-        setSpriteStore(spriteStore);
-        grid[i][j].getNodes().forEach((node) -> node.addEventFilter(MouseEvent.MOUSE_CLICKED,
-            new EventHandler<MouseEvent>() {
-                public void handle(MouseEvent event) {
-                    addSelection(jewel);
-                    event.consume();
-                }
-            }
-        )
-        );
+        addJewel(jewel, i, j);
     }
     
     /**
@@ -464,19 +471,7 @@ public class Board implements Serializable {
     protected void addExplosiveJewel(int type, int i, int j) {
         Jewel jewel = new ExplosivePowerUp(new BasicJewel(type, i, j,
         		i * spriteWidth, j * spriteHeight));
-        grid[i][j] = jewel;
-        spriteStore.addSprites(jewel.getSprites());
-        sceneNodes.getChildren().addAll(0, jewel.getNodes());
-        setSpriteStore(spriteStore);
-        grid[i][j].getNodes().forEach((node) -> node.addEventFilter(MouseEvent.MOUSE_CLICKED,
-            new EventHandler<MouseEvent>() {
-                public void handle(MouseEvent event) {
-                    addSelection(jewel);
-                    event.consume();
-                }
-            }
-        )
-        );
+        addJewel(jewel, i, j);
         grid[i][j].getSprites().forEach((sprite)-> sprite.fadeIn(sceneNodes)); 
      }
     
@@ -490,19 +485,7 @@ public class Board implements Serializable {
     protected void addHyperJewel(int type, int i, int j) {
         Jewel jewel = new HyperPowerUp(new BasicJewel(type, i, j,
         		i * spriteWidth, j * spriteHeight));
-        grid[i][j] = jewel;
-        spriteStore.addSprites(jewel.getSprites());
-        sceneNodes.getChildren().addAll(0, jewel.getNodes());
-        setSpriteStore(spriteStore);
-        grid[i][j].getNodes().forEach((node) -> node.addEventFilter(MouseEvent.MOUSE_CLICKED,
-            new EventHandler<MouseEvent>() {
-                public void handle(MouseEvent event) {
-                    addSelection(jewel);
-                    event.consume();
-                }
-            }
-        )
-        );
+        addJewel(jewel, i, j);
         grid[i][j].getSprites().forEach((sprite)-> sprite.fadeIn(sceneNodes));  
       }
     
