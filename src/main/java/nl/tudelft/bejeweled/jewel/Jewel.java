@@ -23,6 +23,12 @@ public interface Jewel {
     JewelSprite getSprite();
     
     /**
+     * Setter method for the sprite.
+     * @param sprite The new sprite.
+     */
+     void setSprite(JewelSprite sprite);
+     
+    /**
      * Getter method for boardX.
      * @return The X position of the Jewel on the board's grid.
      */
@@ -112,4 +118,10 @@ public interface Jewel {
 	 * @return true if the jewel is Explosive.
 	 */
 	boolean isExplosive();
+	
+	/**
+	 * Animate a jewel disappearing by a hyper combo.
+	 * @param sceneGroup the sceneGroup which displays the jewel disappearing.
+	 */
+	void hyperConsume(Group sceneGroup);
 }

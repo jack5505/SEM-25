@@ -158,6 +158,16 @@ public class BasicJewel implements Jewel {
 	public boolean isExplosive() {
 		return false;
 	}
+
+	@Override
+	public void setSprite(JewelSprite sprite) {
+		this.sprite = sprite;		
+	}
+
+	@Override
+	public void hyperConsume(Group sceneGroup) {
+    	getSprites().forEach((sprite) -> sprite.hyperConsume(sceneGroup));		
+	}
 	
 	}
 

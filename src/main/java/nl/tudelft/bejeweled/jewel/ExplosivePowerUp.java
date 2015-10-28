@@ -15,7 +15,7 @@ import nl.tudelft.bejeweled.sprite.JewelSprite;
  */
 public class ExplosivePowerUp extends JewelPowerUp {
 
-	private JewelSprite powerUpSprite;
+	private ExplosiveSprite powerUpSprite;
 	/**
 	 * Constructor for the explosive power up. 
 	 * Uses the decorator pattern, so should be applied on top of a base Jewel.
@@ -57,8 +57,15 @@ public class ExplosivePowerUp extends JewelPowerUp {
 	
 	@Override
 	public void implode(Group sceneGroup) {
+		super.implode(sceneGroup);
+		powerUpSprite.implode(sceneGroup);
+	}
+	
+	@Override
+	public void explode(Group sceneGroup) {
 		super.explode(sceneGroup);
-		powerUpSprite.explode(sceneGroup);
+		powerUpSprite.remove(sceneGroup);
+
 	}
 	
 	@Override 
