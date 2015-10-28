@@ -661,7 +661,7 @@ public class Board implements Serializable {
 	private boolean anyJewelsAnimating() {
 		for (int x = 0; x < gridWidth; x++) {
 			for (int y = 0; y < gridHeight; y++) {
-				if (grid[x][y] != null && grid[x][y].animationActive()) {
+				if (grid[x][y] != null && grid[x][y].getSprite().animationActive()) {
 					return true;
 				}
 			}
