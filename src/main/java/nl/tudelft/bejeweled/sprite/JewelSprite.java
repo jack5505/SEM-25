@@ -21,7 +21,6 @@ public class JewelSprite extends Sprite {
 		public static final int FADE_OUT_DURATION = 300;
 		public static final int EXPLODE_DURATION = 600;
 		public static final int FADE_IN_DURATION = 300;
-		public static final int EXPLOSIVE_OFFSET = -100;
 		public static final double HYPER_ROTATE = 360f;
 		
 	    private final int type;
@@ -125,12 +124,10 @@ public class JewelSprite extends Sprite {
 	        setvX(0);
 	        setvY(0);
 
-	        String imagePath = "/explode_29.png";
+	        String imagePath = "/explode.png";
 	        jewelImage = new Image(Jewel.class.getResourceAsStream(imagePath));
 	        ImageView jewelImageView = new ImageView();
 	        jewelImageView.setImage(jewelImage);
-	        jewelImageView.setX(EXPLOSIVE_OFFSET);
-	        jewelImageView.setY(EXPLOSIVE_OFFSET);
 	        jewelImageView.setStyle("-fx-background-color:transparent;");
 	        sceneGroup.getChildren().remove(getNode());
 	        sceneGroup.getChildren().add(jewelImageView);

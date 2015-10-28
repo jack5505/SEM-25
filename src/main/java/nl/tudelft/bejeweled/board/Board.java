@@ -320,16 +320,15 @@ public class Board implements Serializable {
      */
     public void checkPowerUps(List<Jewel> comboList) {
         int count = comboList.size();
-    	  List<Jewel> additionalJewels = new ArrayList<Jewel>();
+
           // check if any of the jewels is an explosive jewel
           for (Iterator<Jewel> jewelIterator = comboList.iterator(); jewelIterator.hasNext();) {
               Jewel jewel = jewelIterator.next();
-              
               if (jewel.isExplosive()) {
-              	additionalJewels.addAll(explosiveSurrounding(jewel, comboList));
+            	  List <Jewel> toExplode = explosiveSurrounding(jewel, comboList);
+            	  toExplode.forEach((eJewel) -> eJewel.explode(sceneNodes));
               }
           }
-          comboList.addAll(additionalJewels);
           removeJewels(comboList);
           //Check if PowerJewels should be generated.
            if (count == EXPLOSIVE_JEWEL_COMBO_LENGTH) { 
@@ -662,7 +661,7 @@ public class Board implements Serializable {
 	private boolean anyJewelsAnimating() {
 		for (int x = 0; x < gridWidth; x++) {
 			for (int y = 0; y < gridHeight; y++) {
-				if (grid[x][y] != null && grid[x][y].getSprite().animationActive()) {
+				if (grid[x][y] != null && grid[x][y].animationActive()) {
 					return true;
 				}
 			}
