@@ -202,6 +202,7 @@ public class BejeweledGame extends Game implements Serializable, SessionObserver
     		if (session.getBoard().isLocked()) {
     			return;
     		}
+            session.getBoard().removeJewelSelection();
 	    	session.lockBoard();
 	        try {
 	        	//Before writing, convert the board to a serializable state
