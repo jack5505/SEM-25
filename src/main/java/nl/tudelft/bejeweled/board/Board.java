@@ -97,14 +97,21 @@ public class Board implements Serializable {
      */
     public void boardClicked(Boolean noJewelHit) {
         if (noJewelHit) {
-            if (getSelectionCursor() != null) {
-                // if there was a selection remove it
-                sceneNodes.getChildren().remove(getSelectionCursor().getNode());
-                selectionCursor = null;
-            }
-            getSelection().clear();
+            removeJewelSelection();
         }
         
+    }
+
+    /**
+     * Removes a selection if there is one.
+     */
+    public void removeJewelSelection() {
+        if (getSelectionCursor() != null) {
+            // if there was a selection remove it
+            sceneNodes.getChildren().remove(getSelectionCursor().getNode());
+            selectionCursor = null;
+        }
+        getSelection().clear();
     }
 
     /**
