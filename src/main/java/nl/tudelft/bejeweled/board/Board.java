@@ -380,8 +380,7 @@ public class Board implements Serializable {
     List<Jewel> explosiveSurrounding(Jewel jewel, List<Jewel> comboList) {
     	List<Jewel> newComboList = new ArrayList<Jewel>();
     	newComboList.addAll(comboList);
-    	
-    	System.out.println("Hello World");
+
     	// Upper left corner of explosion region
     	int x0 = -1;
     	int y0 = -1;
@@ -398,10 +397,8 @@ public class Board implements Serializable {
     	    	
     	for (int i = x0; i <= x1; i++) {
     		for (int j = y0; j <= y1; j++) {
-    			System.out.println(i + ", " + j);
     			if (!newComboList.contains(grid[i][j])) {
     				newComboList.add(grid[i][j]);
-    				System.out.println("Added");
     			}
     		}
     	}   				
